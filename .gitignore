@@ -1,0 +1,11 @@
+.DS_Store
+tmp/
+.env
+.env.*
+!.env.example
+dist/
+node_modules/
+.pnpm-store/
+coverage/
+*.tgz
+.tmp-*/
