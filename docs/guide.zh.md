@@ -142,6 +142,28 @@ npm pack --ignore-scripts --pack-destination dist
 
 Issue 和 PR 可使用中文或英文。新 commit 标题统一使用简短英文，格式为 `type(scope): summary`，其中 scope 可省略，例如 `docs: add bilingual readmes`；需要时可在正文补充中文说明。保留已发布的提交历史。修改功能、安装方式或兼容范围时，请同步更新两份 README 和相应指南章节。详细验收与对比文档目前以中文维护；新的发布说明以英文为主，并提供中文版。
 
+### 维护者身份检查
+
+公开维护 checkout 使用 [AGENTS.md](../AGENTS.md) 中的身份允许值。按该文件配置仓库级身份后运行：
+
+```sh
+npm run identity:install
+npm run identity:check
+npm run identity:test
+```
+
+安装只将本 checkout 的 `core.hooksPath` 设为 `.githooks`，不改全局 Git 配置或其他仓库。外部贡献者应保留自己的署名，不要安装这个仅供维护者使用的钩子。安装插件不会安装 Git 钩子。
+
+钩子会拒绝不符合允许值的 author / committer 名称与邮箱、共同作者记录和 tagger。分支或标签更新前检查实际提交对象，覆盖 amend、cherry-pick 继承的作者；推送前检查每个引用的全部可达历史。公开标签必须是 annotated tag，嵌套标签也逐层检查署名。这里核验身份元数据，不要求加密签名。必须使用完整克隆，`.mailmap` 和 replacement object 不能替换被检查的真实身份。
+
+先推送已核验的 annotated tag，再通过受检查的命令发布：
+
+```sh
+npm run release:publish -- vX.Y.Z --title "vX.Y.Z" --notes-file docs/open-source/release-notes.md dist/plugin.tgz dist/source.tar.gz
+```
+
+入口核验 GitHub 账号及远端标签对象与本地完全一致后，才执行带 `--verify-tag` 的 Release 创建；也支持 `--draft`、`--prerelease`，加上 `--check-only` 可执行同样的核验而不创建 Release，不会自动创建缺失的标签。管理员仍能禁用本地钩子，直接使用 GitHub CLI/API 或网页发布也会绕过此入口，因此它是工作流检查，不是服务端访问控制。维护发布必须使用上述入口。
+
 ## 更多文档
 
 - [验收范围与自行测试](open-source/validation.md)：工程检查、不同版本的实机记录及未验证部分。

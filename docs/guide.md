@@ -142,6 +142,28 @@ The repository includes built `lib/` artifacts. `private: true` in `package.json
 
 Issues and pull requests are welcome in English or Chinese. Use concise English titles for new commits in the form `type(scope): summary`, with an optional scope, for example `docs: add bilingual readmes`. A commit body may include Chinese explanations when useful. Keep published history intact. Update both READMEs and the relevant guide sections when features, installation steps, or compatibility change. Detailed validation and comparison documents are currently maintained in Chinese. New release notes use English with a Chinese version.
 
+### Maintainer identity checks
+
+The public maintainer checkout uses the identity allowlist in [AGENTS.md](../AGENTS.md). After configuring that identity locally, run:
+
+```sh
+npm run identity:install
+npm run identity:check
+npm run identity:test
+```
+
+Installation only sets this checkout's `core.hooksPath` to `.githooks`; it does not change global Git settings or other repositories. External contributors should retain their own attribution and should not install this maintainer-only guard. Plugin installation does not install Git hooks.
+
+The hooks reject incorrect author/committer names and emails, co-author trailers, and tagger identities. They inspect the actual commit objects before a branch or tag update, including inherited authors from amend or cherry-pick, and scan all history reachable from every pushed ref. Public tags must be annotated; nested taggers are checked too. This checks identity metadata, not cryptographic signatures. A complete clone is required; mailmaps and replacement objects cannot substitute identities.
+
+Publish through the guarded command after pushing the verified annotated tag:
+
+```sh
+npm run release:publish -- vX.Y.Z --title "vX.Y.Z" --notes-file docs/open-source/release-notes.md dist/plugin.tgz dist/source.tar.gz
+```
+
+The command verifies the GitHub account and the exact remote tag object before creating the Release with `--verify-tag`. It also accepts `--draft` and `--prerelease`; add `--check-only` to run the same checks without creating a Release. It will not create a missing tag. Local hooks can be disabled by an administrator, and direct GitHub CLI/API or website publishing bypasses this command; these are workflow checks, not server-side access controls. Maintainer automation must use the guarded command.
+
 ## Further documentation
 
 - [Validation and self-test steps](open-source/validation.md) (Chinese): engineering checks, Desktop results by version, and unverified areas.

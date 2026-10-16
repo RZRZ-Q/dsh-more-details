@@ -103,7 +103,11 @@
     "pack:verify": "npm run build && node scripts/verify-package.mjs",
     "clean-profile:verify": "npm run build && node scripts/clean-profile-e2e.mjs",
     "dsh:update": "node scripts/update-dsh-compatibility.mjs",
-    "check": "pnpm peers check && npm run typecheck && npm run lint && npm run test && npm run pack:verify",
+    "identity:install": "node scripts/public-identity.mjs install",
+    "identity:check": "node scripts/public-identity.mjs check",
+    "identity:test": "node --test scripts/public-identity.test.mjs",
+    "release:publish": "node scripts/public-identity.mjs release",
+    "check": "npm run identity:test && pnpm peers check && npm run typecheck && npm run lint && npm run test && npm run pack:verify",
     "prepack": "npm run build"
   },
   "peerDependencies": {

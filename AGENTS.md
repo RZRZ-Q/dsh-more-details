@@ -14,6 +14,16 @@
 
 只使用上述公开身份。不得把其他私人账号、邮箱、账号关联说明或私人仓库地址写入公开文件、提交信息、Git 元数据、发布说明及发布附件，包括本规则文件。保留上游版权和许可证；本规则不授权冒用或改写外部贡献者身份。
 
+## 自动拦截
+
+- 维护者首次使用本公开仓库 checkout 时，按下文配置仓库级身份，再运行 `npm run identity:install`。安装器只写当前仓库的 `core.hooksPath=.githooks`；不得改为全局配置，也不得在其他仓库安装。
+- `pre-commit` 检查有效 author / committer；`reference-transaction` 在分支、HEAD 或标签引用更新前检查实际对象和全部可达提交，覆盖 `--author`、amend、cherry-pick 及标签署名；`pre-push` 检查每个拟推送引用及其全部可达历史。名称、邮箱与 `Co-authored-by` 必须符合上表。
+- 提交、推送和发布前运行 `npm run identity:check`；校验读取原始 Git 对象，不接受 `.mailmap` 或 replacement object 对身份的替换。浅克隆须先补全历史。
+- 发布只能使用 `npm run release:publish -- <tag> --title <title> --notes-file <file> [assets...]`。入口核对有效身份、标签及全部可达提交、`gh` 账号，以及本地和远端标签对象一致性，随后才执行带 `--verify-tag` 的 Release 创建。
+- 公开标签必须是 annotated tag，确保有可核验的 tagger；不要求额外配置 GPG / SSH 加密签名。
+- 不得通过禁用钩子、`--no-verify`、直接调用 `gh release create` 或网页发布来绕过检查。本地钩子和发布入口不是 GitHub 服务端权限控制，管理员仍可绕开；不能把它们描述成无法绕过的安全边界。
+- 改动校验器后运行 `npm run identity:test`，使用隔离的本地 Git 仓库验证拒绝行为，不向 GitHub 创建测试 Release。
+
 ## 每次提交前
 
 1. 确认当前目录和 `origin` 都属于上述公开仓库；不得在私密开发仓套用本规则或修改全局 Git 配置。
@@ -57,7 +67,7 @@
    git for-each-ref refs/tags --format='%(refname) %(objecttype) %(taggername) %(taggeremail)'
    ```
 
-   标签署名同样只允许上述公开身份；轻量标签仍须检查其目标提交。不得将旧身份关联的提交或标签带入公开历史。
+   标签署名同样只允许上述公开身份；必须使用 annotated tag（例如 `git tag -a <tag> -m <message>`），自动检查会拒绝没有 tagger 的轻量标签，并递归核验嵌套标签及其目标提交。不得将旧身份关联的提交或标签带入公开历史。
 
 4. 检查 Release 正文、安装包、源码包、校验文件和市场索引。不得包含私人身份、本地 Git 备份、私人验收材料或指向旧身份记录的提交链接；源码归档的内嵌提交标识和市场索引也必须指向已核验的公开提交。
 5. 任一检查不通过就停止推送或发布。修正尚未发布的本次内容后重新检查；发现已公开的身份问题时立即报告，不擅自删除仓库或重写已发布历史。
