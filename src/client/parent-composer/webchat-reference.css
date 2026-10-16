@@ -1,0 +1,17 @@
+.dsh-webchat-reference {
+  margin: 8px 0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, currentColor 3%, transparent);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.dsh-webchat-reference-heading { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.dsh-webchat-reference-title { flex: 1; min-width: 120px; font-weight: 600; overflow-wrap: anywhere; }
+.dsh-webchat-reference-heading button { color: inherit; font: inherit; cursor: pointer; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-radius: 6px; padding: 3px 8px; background: transparent; }
+.dsh-webchat-reference-meta { opacity: .65; margin: 5px 0; }
+.dsh-webchat-reference-preview summary, .dsh-webchat-reference-draft > summary { cursor: pointer; }
+.dsh-webchat-reference-preview > p { margin: 8px 0; opacity: .7; }
+.dsh-webchat-reference-message pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; margin: 4px 0 12px; }
+.dsh-webchat-reference-draft { padding: 6px 12px; font-size: 12px; max-height: 260px; overflow-y: auto; }
