@@ -1,0 +1,52 @@
+{
+  "format": 1,
+  "title": {
+    "en": "More Details for DSH",
+    "zh": "DSH 更多详情"
+  },
+  "description": {
+    "en": "Publisher-maintained index for the community More Details plugin.",
+    "zh": "由作者维护的更多详情社区插件索引。"
+  },
+  "plugins": [
+    {
+      "name": "dsh-more-details",
+      "title": {
+        "en": "More Details · Web Chat",
+        "zh": "更多详情 · 网页讨论"
+      },
+      "description": {
+        "en": "Select text to open an independent DeepSeek web discussion, then bring it back to DSH as a reference with an on-demand text snapshot. Requires DSH Desktop; validated on macOS arm64.",
+        "zh": "划词开启独立 DeepSeek 网页讨论，再通过引用卡和按需读取的正文快照带回 DSH。需要 DSH Desktop；已验收 macOS arm64。"
+      },
+      "author": "RZRZ-Q",
+      "homepage": "https://github.com/RZRZ-Q/dsh-more-details",
+      "repository": {
+        "url": "https://github.com/RZRZ-Q/dsh-more-details"
+      },
+      "metadata": {
+        "keywords": [
+          "deepseek",
+          "webchat",
+          "more details",
+          "更多详情",
+          "引用"
+        ]
+      },
+      "versions": [
+        {
+          "version": "0.3.12",
+          "publishTimestamp": 1792134882,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/RZRZ-Q/dsh-more-details.git",
+            "commit": "f7c8372cffa8acca9376c338e9ec89782eeca22e"
+          },
+          "engines": {
+            "dsh": "0.2.0-rc.2 || 0.2.1-alpha.4"
+          }
+        }
+      ]
+    }
+  ]
+}

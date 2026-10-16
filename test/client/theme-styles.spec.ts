@@ -1,0 +1,150 @@
+import { readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
+import { describe, expect, it } from 'vitest'
+
+const require = createRequire(import.meta.url)
+const moreDetailsCss = readFileSync(
+  new URL('../../src/client/panel/side-chat.css', import.meta.url),
+  'utf8',
+)
+const harnessThemeBundle = readFileSync(
+  require.resolve('@deepseek-ai/dsh-client-ui-theme/client'),
+  'utf8',
+)
+const encodedThemeCss = /\bdesign_platform_css_default\s*=\s*("(?:[^"\\]|\\.)*")/.exec(
+  harnessThemeBundle,
+)?.[1]
+if (encodedThemeCss === undefined) throw new Error('DSH theme bundle does not contain design-platform.css')
+const parsedThemeCss: unknown = JSON.parse(encodedThemeCss)
+if (typeof parsedThemeCss !== 'string') throw new Error('DSH theme bundle contains invalid design-platform.css')
+const harnessThemeCss = parsedThemeCss
+
+function themeValues(dark: boolean): Map<string, string> {
+  const values = new Map<string, string>()
+  for (const block of harnessThemeCss.matchAll(/body(\[data-ds-dark-theme\])?\s*\{([^}]*)\}/g)) {
+    if (block[1] !== undefined && !dark) continue
+    for (const declaration of (block[2] ?? '').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+      values.set(declaration[1] ?? '', (declaration[2] ?? '').trim())
+    }
+  }
+  return values
+}
+
+function resolveThemeValue(name: string, values: ReadonlyMap<string, string>, seen = new Set<string>()): string {
+  if (seen.has(name)) throw new Error(`Circular theme token: ${name}`)
+  const value = values.get(name)
+  if (value === undefined) throw new Error(`Missing theme token: ${name}`)
+  const reference = /^var\((--[\w-]+)\)$/.exec(value)?.[1]
+  if (reference === undefined) return value
+  return resolveThemeValue(reference, values, new Set([...seen, name]))
+}
+
+function rgb(value: string): readonly [number, number, number] {
+  const shortHex = /^#([\da-f])([\da-f])([\da-f])(?:[\da-f])?$/i.exec(value)
+  if (shortHex !== null) {
+    return [
+      Number.parseInt(shortHex[1]!.repeat(2), 16),
+      Number.parseInt(shortHex[2]!.repeat(2), 16),
+      Number.parseInt(shortHex[3]!.repeat(2), 16),
+    ]
+  }
+  const hex = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})(?:[\da-f]{2})?$/i.exec(value)
+  if (hex !== null) {
+    return [
+      Number.parseInt(hex[1]!, 16),
+      Number.parseInt(hex[2]!, 16),
+      Number.parseInt(hex[3]!, 16),
+    ]
+  }
+  const channels = value.match(/[\d.]+/g)?.slice(0, 3).map(Number)
+  if (channels?.length !== 3) throw new Error(`Expected an RGB color, received: ${value}`)
+  return [channels[0]!, channels[1]!, channels[2]!]
+}
+
+function contrastRatio(foreground: string, background: string): number {
+  const luminance = (value: string): number => {
+    const linearize = (channel: number): number => {
+      const normalized = channel / 255
+      return normalized <= 0.04045
+        ? normalized / 12.92
+        : ((normalized + 0.055) / 1.055) ** 2.4
+    }
+    const [red, green, blue] = rgb(value)
+    return 0.2126 * linearize(red) + 0.7152 * linearize(green) + 0.0722 * linearize(blue)
+  }
+  const foregroundLuminance = luminance(foreground)
+  const backgroundLuminance = luminance(background)
+  return (Math.max(foregroundLuminance, backgroundLuminance) + 0.05)
+    / (Math.min(foregroundLuminance, backgroundLuminance) + 0.05)
+}
+
+describe('Side Chat theme styles', () => {
+  it('derives surfaces, text, and accent controls from semantic theme aliases', () => {
+    expect(moreDetailsCss).toContain(
+      '--side-chat-bg: var(--dsw-alias-bg-layer-2, var(--dsw-surface, #ffffff))',
+    )
+    expect(moreDetailsCss).toContain(
+      '--side-chat-text: var(--dsw-alias-label-primary, var(--dsw-text, #19191d))',
+    )
+    expect(moreDetailsCss).toContain(
+      '--side-chat-accent-fill: var(--dsw-alias-button-info-fill, #4176e6)',
+    )
+    expect(moreDetailsCss).toContain(
+      '--side-chat-accent-text: var(--dsw-alias-label-primary-foreground, #ffffff)',
+    )
+  })
+
+  it('only references semantic tokens published by the supported DSH theme', () => {
+    const referenced = new Set(
+      [...moreDetailsCss.matchAll(/var\((--dsw-(?:alias|specific)-[\w-]+)/g)].map(match => match[1]),
+    )
+    const published = new Set(
+      [...harnessThemeCss.matchAll(/(--dsw-(?:alias|specific)-[\w-]+)\s*:/g)].map(match => match[1]),
+    )
+    expect([...referenced].filter(token => !published.has(token)).sort()).toEqual([])
+  })
+
+  it('keeps primary surfaces and accent controls legible in light and dark palettes', () => {
+    for (const dark of [false, true]) {
+      const values = themeValues(dark)
+      const resolve = (token: string): string => resolveThemeValue(token, values)
+      expect(contrastRatio(
+        resolve('--dsw-alias-label-primary'),
+        resolve('--dsw-alias-bg-layer-2'),
+      )).toBeGreaterThanOrEqual(7)
+      expect(contrastRatio(
+        resolve('--dsw-alias-label-primary'),
+        resolve('--dsw-alias-button-floating-fill'),
+      )).toBeGreaterThanOrEqual(7)
+      expect(contrastRatio(
+        resolve('--dsw-alias-label-primary-foreground'),
+        resolve('--dsw-alias-button-info-fill'),
+      )).toBeGreaterThanOrEqual(3)
+    }
+  })
+
+  it('uses theme-aware surfaces and foregrounds for selection controls', () => {
+    expect(moreDetailsCss).toMatch(/\.dsh-more-details-selection-actions\s*\{[^}]*background:\s*var\(--dsw-alias-button-floating-fill, var\(--side-chat-bg\)\)[^}]*color:\s*var\(--side-chat-text\)/s)
+    expect(moreDetailsCss).toMatch(/\.dsh-more-details-selection-comment\s*\{[^}]*background:\s*var\(--side-chat-bg\)[^}]*color:\s*var\(--side-chat-text\)/s)
+    expect(moreDetailsCss).toMatch(/\.dsh-more-details-selection-comment-save\s*\{[^}]*background:\s*var\(--side-chat-accent-fill\)[^}]*color:\s*var\(--side-chat-accent-text\)/s)
+    expect(moreDetailsCss).not.toContain('--dsw-alias-button-info,')
+  })
+
+  it('gives model and thinking-level menus opaque surfaces in both supported palettes', () => {
+    for (const selector of ['dsh-more-details-model-menu', 'dsh-more-details-model-group-title']) {
+      const block = new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`).exec(moreDetailsCss)?.[1]
+      expect(block).toContain('background: var(--side-chat-bg);')
+      expect(block).not.toContain('--dsw-specific-menu')
+    }
+    // The menu and its sticky provider headings share this solid theme layer,
+    // rather than DSH's alpha-tinted menu fill that exposes underlying text.
+    for (const dark of [false, true]) {
+      expect(resolveThemeValue('--dsw-alias-bg-layer-2', themeValues(dark)))
+        .toMatch(/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i)
+    }
+  })
+
+  it('keeps touch selection actions slightly more compact than the initial mobile treatment', () => {
+    expect(moreDetailsCss).toMatch(/\.dsh-more-details-selection-actions\[data-touch\] button\s*\{[^}]*min-height:\s*42px;[^}]*padding-inline:\s*14px;[^}]*white-space:\s*nowrap;/s)
+  })
+})
