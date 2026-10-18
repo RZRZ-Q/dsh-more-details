@@ -5,7 +5,7 @@ English | [简体中文](#简体中文)
 ## Distribution channels
 
 - GitHub Releases provide the installable package, public source archive, and checksums.
-- [`market/index.json`](../../market/index.json) is the author's native DSH market index. Add `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json` in DSH 0.2.1-alpha.4 or 0.2.1-rc.2's **Discover** tab. Every version points to an immutable Git commit. DSH 0.2.0-rc.2 users can continue installing release packages.
+- [`market/index.json`](../../market/index.json) is the author's native DSH market index. Add `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json` in DSH 0.2.1-alpha.4, 0.2.1-rc.1, or 0.2.1-rc.2's **Discover** tab. Every version points to an immutable Git commit. DSH 0.2.0-rc.2 users can continue installing release packages.
 - The repository uses the official community-discovery topic [`dsh-plugin`](https://github.com/topics/dsh-plugin).
 - [DSH-Store](https://github.com/AI-Scarlett/DSH-Store) is an independent community store. Submission and static scanning do not imply admission, a security audit, or DeepSeek endorsement.
 
@@ -24,14 +24,14 @@ As checked on 2026-10-18, [submission #1445](https://github.com/AI-Scarlett/DSH-
 
 The package has no `preinstall`, `install`, `postinstall`, or `prepare` hook. `prepack` builds the distributable for maintainers; committed runtime files are available for Git installation. No runtime `dependencies` or `optionalDependencies` are installed by the plugin; host APIs are peer-provided and the Zod implementation is bundled with its license.
 
-The 0.3.14 compatibility declaration covers exactly `0.2.0-rc.2`, `0.2.1-alpha.4`, and `0.2.1-rc.2`. Desktop feature acceptance is limited to macOS arm64. Windows, Linux, other DSH versions, and browser-only Web Chat are not claimed as validated. See [compatibility](compatibility.md) and [validation](validation.md) for the distinction between release-specific checks and historical desktop results.
+The 0.3.15 compatibility declaration covers exactly `0.2.0-rc.2`, `0.2.1-alpha.4`, `0.2.1-rc.1`, and `0.2.1-rc.2`. The complete 0.3.15 package installs on rc.1 without a local compatibility exemption. Desktop feature acceptance is limited to macOS arm64. Windows, Linux, other DSH versions, and browser-only Web Chat are not claimed as validated. See [compatibility](compatibility.md) and [validation](validation.md) for the distinction between release-specific checks and historical desktop results.
 
 ## 简体中文
 
 ### 分发渠道
 
 - GitHub Release 提供安装包、公开源码包及校验值。
-- [`market/index.json`](../../market/index.json) 是作者维护的 DSH 原生市场索引，DSH 0.2.1-alpha.4 或 0.2.1-rc.2 用户可在「发现」中添加 `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json`。每个版本固定到不可变 Git 提交；DSH 0.2.0-rc.2 继续使用 Release 安装包。
+- [`market/index.json`](../../market/index.json) 是作者维护的 DSH 原生市场索引，DSH 0.2.1-alpha.4、0.2.1-rc.1 或 0.2.1-rc.2 用户可在「发现」中添加 `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json`。每个版本固定到不可变 Git 提交；DSH 0.2.0-rc.2 继续使用 Release 安装包。
 - 仓库使用官方推荐的社区发现 topic：[`dsh-plugin`](https://github.com/topics/dsh-plugin)。
 - [DSH-Store](https://github.com/AI-Scarlett/DSH-Store) 是独立社区商店；提交或静态扫描不代表已收录、独立安全审计或 DeepSeek 官方认可。
 
@@ -47,4 +47,4 @@ The 0.3.14 compatibility declaration covers exactly `0.2.0-rc.2`, `0.2.1-alpha.4
 
 插件没有 `preinstall`、`install`、`postinstall` 或 `prepare`；`prepack` 用于维护者构建分发包，Git 安装可使用已提交的运行产物。没有运行时 `dependencies` / `optionalDependencies`，宿主接口由 peer 提供，Zod 随包构建并保留许可。
 
-0.3.14 精确声明兼容 `0.2.0-rc.2`、`0.2.1-alpha.4` 与 `0.2.1-rc.2`；桌面功能验收范围为 macOS arm64，不将 Windows、Linux、其他版本或普通浏览器中的 Web Chat 标为已验收。逐版本结果见[兼容说明](compatibility.md)与[验收记录](validation.md)。
+0.3.15 精确声明兼容 `0.2.0-rc.2`、`0.2.1-alpha.4`、`0.2.1-rc.1` 与 `0.2.1-rc.2`；完整的 0.3.15 安装包在 rc.1 上无需本机兼容豁免。桌面功能验收范围为 macOS arm64，不将 Windows、Linux、其他版本或普通浏览器中的 Web Chat 标为已验收。逐版本结果见[兼容说明](compatibility.md)与[验收记录](validation.md)。

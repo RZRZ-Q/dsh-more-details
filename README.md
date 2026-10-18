@@ -6,7 +6,7 @@ English | [Simplified Chinese](README.zh.md)
 
 Select a passage, explore it in a bottom-right DeepSeek Web Chat, and return to your main conversation with a reference. Start fresh chats, reopen history, and keep asking questions without losing your place.
 
-[Download v0.3.14](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.14) · [User guide](docs/guide.md) · [Release notes](docs/open-source/release-notes.md)
+[Download v0.3.15](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.15) · [User guide](docs/guide.md) · [Release notes](docs/open-source/release-notes.md)
 
 ![A DeepSeek Web Chat discussion beside the original DSH conversation.](docs/assets/screenshots/webchat.jpg)
 
@@ -36,9 +36,9 @@ Click **Add to DSH** to attach a reference to your main draft. Send it with a qu
 
 ## Get started
 
-Supports **DSH Desktop 0.2.0-rc.2, 0.2.1-alpha.4, and 0.2.1-rc.2**. Validated on macOS arm64; see the [version-specific results](docs/open-source/validation.md). Windows and Linux are unverified. The web panel requires Desktop.
+Supports **DSH Desktop 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, and 0.2.1-rc.2**. Validated on macOS arm64; see the [version-specific results](docs/open-source/validation.md). Windows and Linux are unverified. The web panel requires Desktop.
 
-1. Download **`dsh-more-details-0.3.14.tgz`** from the [release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.14), then install it through **Plugins → Add plugin**. Disable the original AHGGG plugin if installed to avoid duplicate selection menus.
+1. Download **`dsh-more-details-0.3.15.tgz`** from the [release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.15), then install it through **Plugins → Add plugin**. Disable the original AHGGG plugin if installed to avoid duplicate selection menus.
 2. Fully quit and reopen DSH. Click **New Chat** and sign in inside the panel. This website login is separate from your DSH model configuration.
 3. Select text in a completed message and click **More details**. Use **Prompt** to save your preferred instruction; the bundled default is in Chinese.
 4. Continue in the panel, reopen a discussion from **History**, or choose **New** for a fresh chat.

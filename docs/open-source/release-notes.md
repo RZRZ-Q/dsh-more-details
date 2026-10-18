@@ -1,5 +1,49 @@
 # Release notes / 发布说明
 
+## v0.3.15 · Direct installation on DSH 0.2.1-rc.1
+
+Adds **DSH 0.2.1-rc.1** to the supported versions while retaining **0.2.0-rc.2, 0.2.1-alpha.4, and 0.2.1-rc.2**. Installation on rc.1 no longer requires a local compatibility exemption.
+
+### Install or upgrade
+
+Download **`dsh-more-details-0.3.15.tgz`** and install it through **Plugins → Add plugin**, or use the publisher-maintained index in **Discover** on alpha.4, rc.1, or rc.2:
+
+```text
+https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json
+```
+
+This is the **complete plugin**, suitable for a fresh installation or an upgrade. No previous plugin installation, patch-file merging, or `allow-version` command is required. The patch version number denotes the compatibility declaration fix. Keep your existing profile and data when upgrading, then fully quit and reopen DSH; the plugin does not upgrade the DSH client.
+
+Release assets:
+
+- `dsh-more-details-0.3.15.tgz` — complete installable plugin.
+- `dsh-more-details-0.3.15-source.tar.gz` — public source and built runtime.
+- `SHA256SUMS` — archive checksums.
+
+### Validation and scope
+
+- All four supported DSH versions passed installation, dependency-tree checks, and public-entry imports in fresh isolated profiles.
+- The official rc.1 CLI accepted the package in a fresh profile without any compatibility exemption. Actual Host service loading and reopening in a new process passed.
+- The existing rc.2 development environment passed typechecking, peer checks, lint, build, package checks, **31 files / 340 tests**, and **22/22 identity-guard tests**.
+- Business source, built runtime, development dependencies, and lockfile are unchanged from 0.3.14. The rc.1 desktop results for automatic sending, reference reading, restart recovery, and follow-up are retained as prior acceptance evidence; this release did not repeat those GUI or model-call tests.
+
+Existing DSH installations and desktop spaces were untouched. macOS arm64 remains the validated desktop platform; Windows and Linux are unverified. The native market entry pins an immutable public commit. See [validation](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.15/docs/open-source/validation.md), [compatibility](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.15/docs/open-source/compatibility.md), and [capabilities and credits](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.15/docs/open-source/distribution.md).
+
+<details>
+<summary>简体中文</summary>
+
+### v0.3.15 · DSH 0.2.1-rc.1 直接安装支持
+
+正式加入 **DSH 0.2.1-rc.1**，保留 **0.2.0-rc.2、0.2.1-alpha.4 和 0.2.1-rc.2**。rc.1 用户不再需要手动兼容豁免。
+
+下载 **`dsh-more-details-0.3.15.tgz`**，通过 **插件 → 添加插件** 安装；alpha.4、rc.1、rc.2 也可使用上方作者市场索引。它是**完整插件安装包**，可以全新安装或升级，不需要先装旧版、合并补丁或执行 `allow-version`。补丁版本号表示此次修正兼容声明，不表示分发物是增量补丁。升级沿用原 profile 和数据，然后完整退出重开 DSH；插件不会升级客户端。
+
+四版全新隔离 profile 均通过安装、依赖树与入口导入；官方 rc.1 安装器在没有豁免文件的空白 profile 中直接接受安装，实际 Host 加载及新进程重开通过。现有 rc.2 开发环境通过类型、peer、lint、构建、包结构、**31 文件 / 340 项回归**及 **22/22 身份检查回归**。
+
+业务源码、运行产物、开发依赖及锁文件与 0.3.14 一致；rc.1 自动发送、引用回读、重启恢复与续聊沿用此前真实桌面验收结果，本轮没有重跑 GUI 或模型调用。未操作现有 DSH 或切换桌面。附件另提供公开源码包和校验值，不包含私人会话、凭据、浏览器数据或备份。Windows、Linux 尚未验收；能力披露和参考项目见上方文档。
+
+</details>
+
 ## v0.3.14 · DSH 0.2.1-rc.2 compatibility
 
 Adds support for **DSH 0.2.1-rc.2** while retaining **0.2.0-rc.2** and **0.2.1-alpha.4**. This release updates compatibility declarations, development dependencies, and the market entry. Plugin business source and built runtime files are unchanged; the Web Chat workflow, saved data, and RPC contract stay the same.
