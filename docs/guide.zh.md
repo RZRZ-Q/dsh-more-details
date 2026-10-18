@@ -4,12 +4,13 @@
 
 ## 支持环境
 
-当前版本 **0.3.13**，支持 **DSH 0.2.0-rc.2 与 0.2.1-alpha.4**。网页小窗依赖 Desktop 的 browser guest，不支持普通浏览器宿主；Windows、Linux 尚未验收。
+当前版本 **0.3.14**，支持 **DSH 0.2.0-rc.2、0.2.1-alpha.4 与 0.2.1-rc.2**。网页小窗依赖 Desktop 的 browser guest，不支持普通浏览器宿主；Windows、Linux 尚未验收。
 
 各版本的验证范围分别记录，不将旧版验收结果视为每次更新都重新执行：
 
 | 插件版本 | 已验证范围 |
 | --- | --- |
+| 0.3.14 | 更新 DSH 0.2.1-rc.2 的兼容声明和开发依赖，同时保留两版旧宿主支持。三套依赖均通过 typecheck 和 340 项测试，三版全新 profile 的安装与入口导入通过。独立新版 Desktop 通过自动发送、引用回读、完整重启及历史续聊；旧版本轮补验最终包冷启动、旧引用回读与免登录重开，未重复全部流程。 |
 | 0.3.13 | 在两套支持的 DSH 依赖下各通过 340 项测试，并在全新隔离的 alpha.4 profile 通过原生市场 Git 安装、Host 加载和进程冷重开检查。本次分发更新新增作者索引、补齐 CSS 资产并改用非 JIT 的 Zod Mini 校验，不修改保存数据或传输契约；未重跑桌面交互和模型发送验收。 |
 | 0.3.12 | 此前 macOS arm64 桌面验收包括语言切换与恢复。 |
 | 0.3.11 | 此前 macOS arm64 桌面验收包括自动发送、续聊与按需读取。 |
@@ -20,12 +21,12 @@
 
 ### Release 安装包
 
-1. 从 [v0.3.13 发布页](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.13) 下载 `dsh-more-details-0.3.13.tgz`；发布页同时提供源码包与 `SHA256SUMS`。
+1. 从 [v0.3.14 发布页](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.14) 下载 `dsh-more-details-0.3.14.tgz`；发布页同时提供源码包与 `SHA256SUMS`。
 2. 在 DSH **插件 → 添加插件** 中安装并启用。升级时使用同一个 Desktop profile，保留原数据。
 3. 如果安装过原 AHGGG 插件，请将其停用，避免两套划词菜单重叠。
 4. 完整退出并重开 DSH，让 Host 加载新的配置与 RPC 接口；只重新加载插件可能沿用旧接口缓存。
 
-### 从「发现」安装：DSH 0.2.1-alpha.4
+### 从「发现」安装：DSH 0.2.1-alpha.4 与 0.2.1-rc.2
 
 1. 在 **插件 → 实验性插件 → 更多** 中启用 **自定义插件市场**。
 2. 打开 **发现 → 添加索引源**，填入：
@@ -37,14 +38,14 @@
 3. 选择 **更多详情 · 网页讨论**，在安装确认中核对仓库和固定提交后安装。
 4. 停用可能重复的原插件，然后完整退出并重开 DSH。
 
-此索引由插件作者维护，不代表 DeepSeek 官方背书；安装指向不可变 Git 提交，无需发布 npm。DSH rc.2 没有「发现」入口，请使用 Release 安装包；网页小窗仍需要 Desktop。
+此索引由插件作者维护，不代表 DeepSeek 官方背书；安装指向不可变 Git 提交，无需发布 npm。DSH 0.2.0-rc.2 没有「发现」入口，请使用 Release 安装包；网页小窗仍需要 Desktop。
 
 ### Desktop CLI
 
 请使用 **Desktop 自带的 CLI**。以下为 macOS 示例，应用安装位置不同请调整路径：
 
 ```sh
-"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add /absolute/path/dsh-more-details-0.3.13.tgz
+"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add /absolute/path/dsh-more-details-0.3.14.tgz
 ```
 
 安装或升级后完整退出并重开 DSH。不要用另一套独立安装的 CLI 修改 Desktop profile。
@@ -167,8 +168,8 @@ npm run release:publish -- vX.Y.Z --title "vX.Y.Z" --notes-file docs/open-source
 ## 更多文档
 
 - [验收范围与自行测试](open-source/validation.md)：工程检查、不同版本的实机记录及未验证部分。
-- [版本兼容说明](open-source/compatibility.md)：rc.2 与 alpha.4 的兼容改动、环境和验收结果。
+- [版本兼容说明](open-source/compatibility.md)：受支持 DSH 版本的兼容改动、环境和验收结果。
 - [分发与能力说明](open-source/distribution.md)：打包、市场安装与上架申请状态。
 - [相关项目与功能差异](open-source/comparison.md)：固定源码版本和证据链接。
-- [v0.3.13 中英双语发布说明](open-source/release-notes.md)，既往版本记录保留中文。
+- [v0.3.14 中英双语发布说明](open-source/release-notes.md)，既往版本记录保留中文。
 - [上游改造范围](../UPSTREAM.md)、[第三方许可](../THIRD_PARTY_NOTICES.md)和 [MIT 许可](../LICENSE)。

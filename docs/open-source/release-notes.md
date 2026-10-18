@@ -1,5 +1,57 @@
 # Release notes / 发布说明
 
+## v0.3.14 · DSH 0.2.1-rc.2 compatibility
+
+Adds support for **DSH 0.2.1-rc.2** while retaining **0.2.0-rc.2** and **0.2.1-alpha.4**. This release updates compatibility declarations, development dependencies, and the market entry. Plugin business source and built runtime files are unchanged; the Web Chat workflow, saved data, and RPC contract stay the same.
+
+### Install or upgrade
+
+Install `dsh-more-details-0.3.14.tgz` through **Plugins → Add plugin**. On DSH 0.2.1-alpha.4 or 0.2.1-rc.2, you can also enable **Custom plugin market** under **Plugins → Experimental plugins → More**, then add this source in **Discover**:
+
+```text
+https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json
+```
+
+Keep your existing Desktop profile and data, then fully quit and reopen DSH. This plugin update does not upgrade the DSH client.
+
+Release assets:
+
+- `dsh-more-details-0.3.14.tgz` — installable plugin.
+- `dsh-more-details-0.3.14-source.tar.gz` — public source and built runtime.
+- `SHA256SUMS` — archive checksums.
+
+### Validation
+
+- All three supported DSH dependency environments passed typechecking and **31 files / 340 tests**. The same package passed installation, dependency-tree checks, and public-entry imports in three clean profiles. Peer checks, lint, build, package verification, and **22/22 identity-guard tests** passed.
+- The independent macOS arm64 **0.2.1-rc.2 Desktop** passed custom-prompt saving, selection-based automatic sending, a real website reply, Add to DSH with draft preservation, and actual `read_webchat_reference` reading.
+- After a full quit and confirmed process termination, a cold restart restored the main conversation and reference card. Before opening the website, the main model read the same two-message snapshot, with matching reference ID/capture time, `partial`, and `nextCursor: null`. The card reopened the same chat without signing in; follow-up, blank New Chat, history reopening without resending, and saved-prompt recovery passed.
+- Both older hosts passed final-package cold startup, actual historical-reference reading, and signed-in reopening. Their complete sending/follow-up flows were not repeated in this release.
+
+The new Desktop test used the official 0.2.1-rc.2 payload in a Direct Electron 44.7.0 wrapper with separate application identity and data. Official `lib/` and `renderer/` files were unchanged; this is not a test of installing the unmodified official app shell. Existing DSH installations and desktop spaces were untouched. A dismissible website “Abnormal usage environment” notice appeared; normal dismissal allowed follow-up, without changing or bypassing website checks. Windows and Linux remain unvalidated. See the [versioned validation record](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.14/docs/open-source/validation.md).
+
+### Community store review
+
+[DSH-Store submission #1445](https://github.com/AI-Scarlett/DSH-Store/issues/1445) remains open. Its previous fixed-source scan inspected 129/129 files with no findings; that is not a scan of this new revision. The declared credential capability still needs maintainer review. See the [capability disclosure](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.14/docs/open-source/distribution.md). Credits and licenses are unchanged; see [THIRD_PARTY_NOTICES](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.14/THIRD_PARTY_NOTICES.md).
+
+<details>
+<summary>简体中文</summary>
+
+### v0.3.14 · DSH 0.2.1-rc.2 兼容更新
+
+新增 **DSH 0.2.1-rc.2**，保留 **0.2.0-rc.2** 与 **0.2.1-alpha.4**。本次只更新兼容声明、开发依赖和市场条目；插件业务源码与运行构建产物未变，Web Chat 工作流、保存数据和 RPC 契约保持一致。
+
+通过 **插件 → 添加插件** 安装 `dsh-more-details-0.3.14.tgz`；alpha.4 与新版 rc.2 也可使用上方作者市场索引。升级沿用原 profile 和数据，随后完整退出重开；不会升级 DSH 客户端。附件另提供公开源码包和 `SHA256SUMS`。
+
+三套真实依赖均通过 typecheck 与 **31 文件 / 340 项测试**；同包三版全新 profile 安装、依赖树、入口导入，以及 peer、lint、构建、包结构和 **22/22 身份校验回归**全部通过。
+
+新版独立 macOS arm64 Desktop 通过自定义 prompt、划词自动发送、真实回复、保留草稿添加引用及实际正文回读。完整退出并确认进程结束后，冷启动恢复主会话和引用卡；打开官网前仍读到相同引用 ID、采集时间和两条消息快照。点击卡免登录重开原聊天、追问、新建后历史重开且不重复发送、prompt 重启保留均通过。两版旧宿主本轮补验最终包冷启动、旧引用回读和免登录重开，没有重复全部发送与续聊流程。
+
+新版使用官方 payload 与 Electron 44.7.0 的 Direct 独立测试封装，官方 `lib/`、`renderer/` 文件未改；不计作官方原始应用壳安装验收。未改动现有 DSH 或切换桌面。官网可关闭的“使用环境异常”提示正常关闭后可继续追问，未修改或规避检测。Windows、Linux 尚未验收。详见上方验收记录。
+
+申请 #1445 仍待审核；此前 129/129 文件、零发现的扫描不代表新版扫描或商店收录。凭据能力仍需维护者专项审核，能力披露、参考项目与许可见上方链接。
+
+</details>
+
 ## v0.3.13 · Native market distribution
 
 More Details can now be installed from a publisher-maintained index in DSH alpha.4's **Discover** tab. This release also makes the distributable source complete for community-store review without changing the Web Chat workflow, saved data, or RPC contract.

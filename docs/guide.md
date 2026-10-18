@@ -4,12 +4,13 @@
 
 ## Supported environments
 
-Current version: **0.3.13**, supporting **DSH 0.2.0-rc.2 and 0.2.1-alpha.4**. The web panel requires Desktop's browser guest; browser-only DSH is outside the current support scope. Windows and Linux have not been validated.
+Current version: **0.3.14**, supporting **DSH 0.2.0-rc.2, 0.2.1-alpha.4, and 0.2.1-rc.2**. The web panel requires Desktop's browser guest; browser-only DSH is outside the current support scope. Windows and Linux have not been validated.
 
 Validation is recorded by release rather than implied for every update:
 
 | Plugin release | Verified scope |
 | --- | --- |
+| 0.3.14 | Compatibility declarations and development dependencies updated for DSH 0.2.1-rc.2 while retaining both older versions. All three dependency environments passed typechecking and 340 tests, with clean-profile installation and imports. The independent 0.2.1-rc.2 Desktop passed automatic sending, reference reading, and full restart/history/follow-up recovery. Older hosts passed final-package cold startup, historical-reference reading, and signed-in reopening; their complete workflows were not repeated. |
 | 0.3.13 | 340 tests against each supported DSH version; native-market Git installation, Host loading, and process-restart checks in a fresh isolated alpha.4 profile. This distribution update adds the publisher-maintained index, complete CSS assets, and non-JIT Zod Mini validation without changing saved data or the wire contract. It did not repeat Desktop interaction or model-send acceptance. |
 | 0.3.12 | Earlier macOS arm64 Desktop acceptance for language switching and recovery. |
 | 0.3.11 | Earlier macOS arm64 Desktop acceptance for automatic sending, follow-up questions, and on-demand reading. |
@@ -20,12 +21,12 @@ See [version compatibility](open-source/compatibility.md), [validation records](
 
 ### Release package
 
-1. Download `dsh-more-details-0.3.13.tgz` from the [v0.3.13 release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.13). The release also includes the source archive and `SHA256SUMS`.
+1. Download `dsh-more-details-0.3.14.tgz` from the [v0.3.14 release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.14). The release also includes the source archive and `SHA256SUMS`.
 2. Install and enable it through DSH's **Plugins → Add plugin**. To upgrade, use the same Desktop profile and keep its existing data.
 3. Disable the original AHGGG plugin if it is installed, to avoid duplicate selection menus.
 4. Fully quit and reopen DSH so the Host loads the new configuration and RPC interfaces. Reloading only the plugin can retain cached interfaces.
 
-### Discover in DSH 0.2.1-alpha.4
+### Discover in DSH 0.2.1-alpha.4 and 0.2.1-rc.2
 
 1. In **Plugins → Experimental plugins → More**, enable **Custom plugin market**.
 2. Open **Discover → Add index source** and paste:
@@ -37,14 +38,14 @@ See [version compatibility](open-source/compatibility.md), [validation records](
 3. Select **More Details · Web Chat**, check the repository and pinned commit in the installation confirmation, and install it.
 4. Disable any duplicate original plugin, then fully quit and reopen DSH.
 
-The index is maintained by this plugin's author; it is not a DeepSeek-endorsed catalog. It points to immutable Git commits and does not require npm publication. DSH rc.2 does not have Discover; use the release package instead. The web panel still requires Desktop.
+The index is maintained by this plugin's author; it is not a DeepSeek-endorsed catalog. It points to immutable Git commits and does not require npm publication. DSH 0.2.0-rc.2 does not have Discover; use the release package instead. The web panel still requires Desktop.
 
 ### Desktop CLI
 
 Use the **CLI bundled with Desktop**. This macOS example assumes the app is installed under `~/Applications`; adjust the path if needed:
 
 ```sh
-"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add /absolute/path/dsh-more-details-0.3.13.tgz
+"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add /absolute/path/dsh-more-details-0.3.14.tgz
 ```
 
 Fully quit and reopen DSH after installation or an upgrade. Do not use a separately installed CLI to modify the Desktop profile.
@@ -167,8 +168,8 @@ The command verifies the GitHub account and the exact remote tag object before c
 ## Further documentation
 
 - [Validation and self-test steps](open-source/validation.md) (Chinese): engineering checks, Desktop results by version, and unverified areas.
-- [Version compatibility](open-source/compatibility.md) (Chinese): rc.2 and alpha.4 changes, environments, and results.
+- [Version compatibility](open-source/compatibility.md) (Chinese): supported DSH versions, environments, and results.
 - [Distribution and capabilities](open-source/distribution.md) (Chinese): packaging, market installation, and store submission status.
 - [Related projects and feature comparison](open-source/comparison.md) (Chinese): fixed source revisions and evidence links.
-- [v0.3.13 release notes](open-source/release-notes.md) (English and Chinese; earlier releases in Chinese).
+- [v0.3.14 release notes](open-source/release-notes.md) (English and Chinese; earlier releases in Chinese).
 - [Upstream adaptation scope](../UPSTREAM.md) (Chinese), [third-party notices](../THIRD_PARTY_NOTICES.md), and [MIT license](../LICENSE).
