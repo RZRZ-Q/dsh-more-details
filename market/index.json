@@ -35,6 +35,18 @@
       },
       "versions": [
         {
+          "version": "0.3.14",
+          "publishTimestamp": 1792319973,
+          "source": {
+            "type": "git",
+            "url": "https://github.com/RZRZ-Q/dsh-more-details.git",
+            "commit": "374b66c5ddd295e410bc216c17223df3a6fa1e08"
+          },
+          "engines": {
+            "dsh": "0.2.0-rc.2 || 0.2.1-alpha.4 || 0.2.1-rc.2"
+          }
+        },
+        {
           "version": "0.3.13",
           "publishTimestamp": 1792137654,
           "source": {
