@@ -1,12 +1,12 @@
 # DSH 版本兼容
 
-## 0.3.16：rc.3 兼容与 npm 候选阶段
+## 0.3.16：rc.3 兼容与 npm 分发
 
-The candidate adds exact `0.2.1-rc.3` metadata while retaining all four earlier hosts. Package/import checks pass for all five versions; the official rc.3 installer and real Host reference reads pass without an exemption. The isolated rc.3 Desktop passed automatic sending, real model snapshot reading, full restart recovery, and follow-up. npm registry migration is checked with 0.3.16-rc.1 before stable publication. See [current validation](validation.md).
+This release adds exact `0.2.1-rc.3` metadata while retaining all four earlier hosts. Package/import checks pass for all five versions; the official rc.3 installer and real Host reference reads pass without an exemption. The isolated rc.3 Desktop passed automatic sending, real model snapshot reading, full restart recovery, and follow-up. Real tgz/Git-to-registry migration passed with 0.3.16-rc.1; the final runtime is byte-identical. The npm-installed rc.3 Desktop also passed cold-start model reading before opening the website and signed-in history reopening. See [current validation](validation.md).
 
-候选范围为 `0.2.0-rc.2 || 0.2.1-alpha.4 || 0.2.1-rc.1 || 0.2.1-rc.2 || 0.2.1-rc.3`。不将未验证的未来版本加入通配范围。五版安装和导入、rc.3 官方安装器及 Host 读取已通过；rc.3 桌面自动发送、实际模型回读、完整重启恢复和续聊已通过，npm registry 迁移将在 0.3.16-rc.1 候选包上完成。
+支持范围为 `0.2.0-rc.2 || 0.2.1-alpha.4 || 0.2.1-rc.1 || 0.2.1-rc.2 || 0.2.1-rc.3`。不将未验证的未来版本加入通配范围。五版安装和导入、rc.3 官方安装器及 Host 读取已通过；rc.3 桌面自动发送、实际模型回读、完整重启恢复和续聊已通过，真实 npm registry 迁移已在 0.3.16-rc.1 候选包上完成，正式版运行文件与该包一致。npm 安装后的 rc.3 冷启动、打开网页前的模型回读及免登录历史重开也已通过。
 
-已确认的升级障碍：0.3.15 的精确版本声明未包含 rc.3，官方加载前检查会拒绝它；这是版本声明问题，不能仅凭这条报错推断浏览器接口已经损坏。rc.3 新增菜单 Slot 与草稿处理参数后，现有插件类型检查和回归仍通过。不会要求用户先安装旧版或手工修改 DSH；候选版完成验收发布后会作为完整插件包分发。
+已确认的升级障碍：0.3.15 的精确版本声明未包含 rc.3，官方加载前检查会拒绝它；这是版本声明问题，不能仅凭这条报错推断浏览器接口已经损坏。rc.3 新增菜单 Slot 与草稿处理参数后，现有插件类型检查和回归仍通过。不会要求用户先安装旧版或手工修改 DSH；0.3.16 以完整插件包分发。
 
 普通浏览器没有 Desktop browser bridge 时，网页自动发送和网页重开不可用；插件提前禁用或省略相关入口，保留选文批注、API 侧聊、引用预览与 Host 快照读取。Windows / Linux 完整功能仍未验收。
 

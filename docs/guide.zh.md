@@ -1,17 +1,16 @@
 # 使用与开发指南
 
-> **0.3.16-rc.1 为 npm 候选版。** Desktop rc.3 核心验收已通过，registry 迁移是剩余发布条件；通过前稳定版仍为 [0.3.15](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.15)。
-
 [项目简介](../README.zh.md) · [English guide](guide.md)
 
 ## 支持环境
 
-当前版本 **0.3.16-rc.1**，支持 **DSH 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3**。网页讨论需要官方 Desktop browser guest。普通浏览器中隐藏「新建 Chat」，「更多详情」置灰并说明原因；添加到聊天、API 侧聊、已有引用预览和按需读取仍保留，插件内重开官网仅 Desktop 可用。Windows/Linux 全功能尚未完成验收。
+当前版本 **0.3.16**，支持 **DSH 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3**。网页讨论需要官方 Desktop browser guest。普通浏览器中隐藏「新建 Chat」，「更多详情」置灰并说明原因；添加到聊天、API 侧聊、已有引用预览和按需读取仍保留，插件内重开官网仅 Desktop 可用。Windows/Linux 全功能尚未完成验收。
 
 各版本的验证范围分别记录，不将旧版验收结果视为每次更新都重新执行：
 
 | 插件版本 | 已验证范围 |
 | --- | --- |
+| 0.3.16 | 五版安装导入、345 项回归及独立 rc.3 桌面的自动发送、引用回读、重启恢复和续聊通过。真实 tgz/Git → npm 迁移保留数据，移走旧归档后安装操作仍成功；npm 安装后的 rc.3 冷启动先实际读取本地快照，再免登录重开原讨论。 |
 | 0.3.14 | 更新 DSH 0.2.1-rc.2 的兼容声明和开发依赖，同时保留两版旧宿主支持。三套依赖均通过 typecheck 和 340 项测试，三版全新 profile 的安装与入口导入通过。独立新版 Desktop 通过自动发送、引用回读、完整重启及历史续聊；旧版本轮补验最终包冷启动、旧引用回读与免登录重开，未重复全部流程。 |
 | 0.3.13 | 在两套支持的 DSH 依赖下各通过 340 项测试，并在全新隔离的 alpha.4 profile 通过原生市场 Git 安装、Host 加载和进程冷重开检查。本次分发更新新增作者索引、补齐 CSS 资产并改用非 JIT 的 Zod Mini 校验，不修改保存数据或传输契约；未重跑桌面交互和模型发送验收。 |
 | 0.3.12 | 此前 macOS arm64 桌面验收包括语言切换与恢复。 |
@@ -23,19 +22,19 @@
 
 ### npm（推荐）
 
-在 **插件 → 添加插件** 中输入 `dsh-more-details@0.3.16-rc.1`。DSH 从 npm 安装预编译包并检查宿主兼容性。升级时继续使用原 profile，更换包来源不需要删除插件数据。
+在 **插件 → 添加插件** 中输入 `dsh-more-details@0.3.16`。DSH 从 npm 安装预编译包并检查宿主兼容性。升级时继续使用原 profile，更换包来源不需要删除插件数据。
 
 Desktop CLI 必须使用**对应桌面安装自带的 CLI**。通过 CLI 安装前完整退出目标 DSH 实例，安装后重开。下面的 macOS 示例假设应用位于 `~/Applications`，请按实际安装位置调整：
 
 ```sh
-"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.16-rc.1
+"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.16
 ```
 
-浏览器宿主使用自己的 CLI 和 profile，例如 `dsh plugin --profile web add dsh-more-details@0.3.16-rc.1`。不要使用另外安装的 CLI 管理 Desktop profile，也不要在任意目录直接执行 `pnpm add`。后续升级沿用同一命令，将版本号替换为需要的兼容版本。
+浏览器宿主使用自己的 CLI 和 profile，例如 `dsh plugin --profile web add dsh-more-details@0.3.16`。不要使用另外安装的 CLI 管理 Desktop profile，也不要在任意目录直接执行 `pnpm add`。后续升级沿用同一命令，将版本号替换为需要的兼容版本。如果镜像尚未同步新发布版本，可在该次安装命令后加 `--registry=https://registry.npmjs.org`，无需修改全局 registry。
 
 ### 发现市场
 
-DSH 0.2.1-alpha.4、0.2.1-rc.1 和 0.2.1-rc.2 支持作者维护的原生市场索引：
+DSH 0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3 支持作者维护的原生市场索引：
 
 1. 在 **插件 → 实验性插件 → 更多** 中启用 **自定义插件市场**。
 2. 在 **发现 → 添加索引源** 中添加 `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json`。
@@ -53,7 +52,7 @@ DSH 0.2.1-alpha.4、0.2.1-rc.1 和 0.2.1-rc.2 支持作者维护的原生市场�
 ### 从已有 tgz 或 Git 安装迁移
 
 1. 备份目标 profile；执行 CLI 更改前完整退出该 DSH 实例。保持同一 profile、插件名称、凭据、附件和浏览器数据。
-2. 通过对应 DSH 安装器/CLI 安装 `dsh-more-details@0.3.16-rc.1`，替换包来源；不需要先卸载插件并删除其数据。
+2. 通过对应 DSH 安装器/CLI 安装 `dsh-more-details@0.3.16`，替换包来源；不需要先卸载插件并删除其数据。
 3. 重开 DSH，检查版本、自定义 prompt、历史、原引用及已记住的网页登录。官网会话本身仍可能独立到期。
 4. 确认该插件的 profile 依赖不再指向旧归档，且另一项插件/包操作成功后，再删除旧归档。
 

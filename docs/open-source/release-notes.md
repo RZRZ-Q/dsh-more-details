@@ -1,21 +1,58 @@
 # Release notes / 发布说明
 
-## v0.3.16-rc.1 · npm migration candidate
+## v0.3.16 · npm distribution, Web host controls, and DSH rc.3
 
-- Detect the official Desktop browser bridge before registering Web Chat. In ordinary browsers, hide New Chat, disable More details with a localized explanation, and omit website reopening from reference cards. Keep Add to chat, API side chat, preview, and Host snapshot reading.
-- Prepare a precompiled npm distribution and bilingual tgz/Git migration instructions. Retain Git and Release archives. The native market will use one npm source per new version after registry verification; it cannot list duplicate versions with different sources.
-- Add exact DSH `0.2.1-rc.3` compatibility metadata and development dependencies while preserving the four earlier host versions.
-- Add a package-scoped npm publication guard for the public maintainer, clean committed source, and a matching annotated remote tag.
+Install or upgrade through **Plugins → Add plugin** with **`dsh-more-details@0.3.16`**, or use the matching DSH CLI:
 
-Package checks, five-version installation/imports, bilingual Web menus, and rc.3 Desktop automatic sending, reference reading, restart recovery, and follow-up pass. This candidate uses npm **next** for real registry migration checks. **The stable Release and market update follow only after migration acceptance.** See [validation](validation.md).
+```sh
+dsh plugin --profile desktop add dsh-more-details@0.3.16 --registry=https://registry.npmjs.org
+```
 
-### 中文
+Use the CLI bundled with your Desktop installation, keep the same profile/data, and fully quit DSH before CLI installation. Reopen it afterward. This is a complete plugin package; no previous version or compatibility exemption is required. The plugin does not upgrade the DSH client.
 
-- 在注册网页小窗前检查桌面浏览器能力；普通 Web 隐藏新建入口、禁用更多详情并解释原因，旧引用省略网页重开，保留批注、API 侧聊、预览与 Host 正文读取。
-- 准备 npm 预编译分发及中英文迁移说明，保留 Git / Release；真实 registry 验收完成后再将新市场条目切到单一 npm 来源。
-- 候选兼容声明增加 DSH `0.2.1-rc.3`，保留四版旧宿主；新增仅作用于本包的 npm 公开身份发布检查。
+### Changes
 
-工程检查、五版安装导入、中英 Web 菜单，以及 rc.3 桌面自动发送、实际引用回读、完整重启恢复与续聊已通过。候选包使用 npm **next** 完成真实 registry 迁移验收；**通过后才更新稳定版 Release 与市场索引。**
+- **npm installation and upgrades:** precompiled registry package, bilingual tgz/Git migration instructions, and an exact npm source in the author-maintained market index. Git and Release archives remain available. No consumer `preinstall`, `install`, `postinstall`, or `prepare` hooks.
+- **Honest Web host controls:** without the official Desktop browser bridge, hide New Chat, disable More details with a localized explanation, and omit website reopening from reference cards. Keep Add to chat, API side chat, reference previews, and Host snapshot reading. This does not add browser-only website automation.
+- **DSH 0.2.1-rc.3 support:** add its exact compatibility metadata and development dependencies, while retaining 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, and 0.2.1-rc.2.
+- **Publication identity checks:** verify the public maintainer, committed source, and matching annotated remote tag before npm publication.
+
+### Validation
+
+- Type, peer, lint, build, and package checks; **345 tests in 32 files** and **23 identity-guard tests** passed. All five supported hosts passed isolated installation and public-entry imports.
+- Isolated macOS arm64 rc.3 Desktop passed selection → automatic website sending with custom prompt/context → real reply → Add to DSH → actual main-model snapshot reading. Full restart, remembered sign-in, reference/history reopening, follow-up, and prompt persistence passed.
+- Published `0.3.16-rc.1` was used for real npm migration from 0.3.15 tgz and Git installations. Each rc.2 profile retained all 13 protected files. Removing the old tgz did not block another install; actual Host reads returned unchanged snapshots after process restarts.
+- The independent rc.3 instance retained all 102 protected files during registry migration. After a cold start, the main model read the saved snapshot **before opening the website**; the reference and history then reopened the original discussion without signing in. The stable release has the same 130 runtime files, byte for byte.
+- Browser-hosted DSH passed bilingual disabled-state explanations, Add to chat, saved-reference preview, and a real API side-chat reply.
+
+Existing user DSH installations and desktop spaces were untouched. Full desktop feature acceptance remains **macOS arm64**; Windows/Linux are not claimed as maintainer-validated. Five-version installation checks do not imply all five Desktop workflows were rerun. See the [validation record](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.16/docs/open-source/validation.md) and [migration guide](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.16/docs/guide.md#installation-and-upgrades).
+
+### Assets
+
+- `dsh-more-details-0.3.16.tgz` — complete installable plugin.
+- `dsh-more-details-0.3.16-source.tar.gz` — public source and built runtime.
+- `SHA256SUMS` — archive checksums.
+
+Inspired by the earlier Codex More details experience. Built on AHGGG/dsh-side-chat, with references to dsh-deepseek-webchat and dsh-chat-bridge; upstream attribution and licenses remain in [THIRD_PARTY_NOTICES](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.16/THIRD_PARTY_NOTICES.md).
+
+<details>
+<summary>简体中文</summary>
+
+### v0.3.16 · npm 分发、Web 入口修复与 DSH rc.3 兼容
+
+在 **插件 → 添加插件** 中安装 **`dsh-more-details@0.3.16`**，或使用对应 DSH 安装自带的 CLI 执行上方命令。升级沿用原 profile 和数据，CLI 安装前完整退出、安装后重开。这是完整插件包，无需先装旧版或手动兼容豁免，不升级 DSH 客户端。
+
+- 新增 npm 预编译包与中英文迁移步骤；新市场条目使用精确 npm 版本，保留 Git 和 Release 安装包。没有消费端安装钩子。
+- 普通浏览器缺少桌面能力时，提前隐藏「新建 Chat」、禁用「更多详情」并解释原因、移除引用的网页重开入口；保留添加到聊天、API 侧聊、引用预览与按需读取。本版没有新增纯浏览器网页自动化。
+- 新增 DSH `0.2.1-rc.3`，保留四个旧版本；加入仅作用于本包的 npm 公开身份发布校验。
+
+五版隔离安装导入、工程检查、**32 文件 / 345 项回归**与 **23 项身份校验回归**通过。独立 rc.3 桌面通过自定义提示词划词自动发送、网页回复、添加引用、主模型实际读取、完整重启恢复、免登录历史重开和续聊。
+
+使用已发布的 `0.3.16-rc.1` 补验真实 tgz/Git → npm 迁移：两套 rc.2 profile 各 13 个受保护文件保持一致，移走旧 tgz 后安装仍成功，Host 新进程重开后读到相同快照。rc.3 安装期间 102 个受保护文件保持一致；冷启动后未打开官网就完成主模型实际快照读取，随后免登录重开原引用与历史。正式版与验收候选包的 130 个运行文件逐字节相同。普通 Web 的中英菜单、批注、预览和真实 API 侧聊回复也已通过。
+
+未操作日常 DSH 或切换桌面。完整桌面功能仍以 macOS arm64 为维护者验收平台，Windows/Linux 未标为已验收；五版安装检查不等于五版全部重复桌面流程。安装包、公开源码包和校验值不包含私人会话、凭据或备份。
+
+</details>
 
 ## v0.3.15 · Direct installation on DSH 0.2.1-rc.1
 
