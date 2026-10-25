@@ -3,6 +3,17 @@ import type { WebChatPort } from './controller.js';
 import { type WebChatMessage } from './messages.js';
 import type { WebChatLoginStore } from '../../shared/webchat-login.js';
 import type { WebChatCapture } from '../../shared/webchat-reference.js';
+interface Reservation {
+    lease: string;
+    partition: string;
+}
+interface BrowserBridge {
+    acquire(workspace: string): Promise<Reservation>;
+    release(lease: string): Promise<void>;
+    onOpenRequested(lease: string, listener: (url: string) => void): () => void;
+}
+/** 在注册入口和真正创建 guest 时检查宿主能力；Web 渲染器也会在普通浏览器中加载。 */
+export declare function webChatBrowserBridge(): BrowserBridge | undefined;
 /** 官方临时 guest + 插件专用凭据：只保存官网登录白名单，不保存 Cookie 或整个浏览器资料。 */
 export declare class DeepSeekGuest implements WebChatPort {
     private readonly loginStore;
@@ -47,3 +58,4 @@ export declare class DeepSeekGuest implements WebChatPort {
     dispose(): Promise<void>;
     private releaseGuest;
 }
+export {};

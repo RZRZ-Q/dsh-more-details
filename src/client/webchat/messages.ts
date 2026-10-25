@@ -3,6 +3,11 @@ import type { Localize } from '../dsh/locale.js'
 /** 保存两种文案而非当前译文，使正在显示的状态也能跟随 DSH 切换语言。 */
 export type WebChatMessage = string | { readonly zh: string; readonly en: string }
 
+export const WEB_CHAT_DESKTOP_REQUIRED = {
+  zh: '网页讨论需要官方 DSH 桌面端的浏览器接口；普通浏览器中仍可使用添加到聊天、侧边对话和引用预览。',
+  en: 'Web Chat requires the browser interface in the official DSH desktop app. Add to chat, side chat, and reference previews remain available in a regular browser.',
+}
+
 export function renderWebChatMessage(message: WebChatMessage, text: Localize): string {
   return typeof message === 'string' ? message : text(message.zh, message.en)
 }

@@ -8,7 +8,7 @@ export declare function webChatReferences(snapshot: ParentComposerInputSnapshot)
 /** 只更新未发送草稿内同一网页的引用，已发送消息中的快照保持不变。 */
 export declare function addWebChatReference(input: ParentComposerInput, reference: WebChatReference, onCommitted?: () => void): boolean;
 /** 草稿 chip 使用 DSH 官方 openReference 钩子，避免伪装成 DSH Session ID。 */
-export declare function createWebChatReferenceSource(onOpen: OpenWebChatReference, locale: DshLocale): SelectionReferenceSource;
+export declare function createWebChatReferenceSource(onOpen: OpenWebChatReference | undefined, locale: DshLocale): SelectionReferenceSource;
 export declare function WebChatReferenceCard({ reference, onOpen, locale }: {
     readonly reference: WebChatReference;
     readonly onOpen?: OpenWebChatReference;

@@ -1,5 +1,22 @@
 # Release notes / 发布说明
 
+## v0.3.16-rc.1 · npm migration candidate
+
+- Detect the official Desktop browser bridge before registering Web Chat. In ordinary browsers, hide New Chat, disable More details with a localized explanation, and omit website reopening from reference cards. Keep Add to chat, API side chat, preview, and Host snapshot reading.
+- Prepare a precompiled npm distribution and bilingual tgz/Git migration instructions. Retain Git and Release archives. The native market will use one npm source per new version after registry verification; it cannot list duplicate versions with different sources.
+- Add exact DSH `0.2.1-rc.3` compatibility metadata and development dependencies while preserving the four earlier host versions.
+- Add a package-scoped npm publication guard for the public maintainer, clean committed source, and a matching annotated remote tag.
+
+Package checks, five-version installation/imports, bilingual Web menus, and rc.3 Desktop automatic sending, reference reading, restart recovery, and follow-up pass. This candidate uses npm **next** for real registry migration checks. **The stable Release and market update follow only after migration acceptance.** See [validation](validation.md).
+
+### 中文
+
+- 在注册网页小窗前检查桌面浏览器能力；普通 Web 隐藏新建入口、禁用更多详情并解释原因，旧引用省略网页重开，保留批注、API 侧聊、预览与 Host 正文读取。
+- 准备 npm 预编译分发及中英文迁移说明，保留 Git / Release；真实 registry 验收完成后再将新市场条目切到单一 npm 来源。
+- 候选兼容声明增加 DSH `0.2.1-rc.3`，保留四版旧宿主；新增仅作用于本包的 npm 公开身份发布检查。
+
+工程检查、五版安装导入、中英 Web 菜单，以及 rc.3 桌面自动发送、实际引用回读、完整重启恢复与续聊已通过。候选包使用 npm **next** 完成真实 registry 迁移验收；**通过后才更新稳定版 Release 与市场索引。**
+
 ## v0.3.15 · Direct installation on DSH 0.2.1-rc.1
 
 Adds **DSH 0.2.1-rc.1** to the supported versions while retaining **0.2.0-rc.2, 0.2.1-alpha.4, and 0.2.1-rc.2**. Installation on rc.1 no longer requires a local compatibility exemption.

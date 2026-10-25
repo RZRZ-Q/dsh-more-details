@@ -1,5 +1,27 @@
 # 验收范围与自行测试
 
+## 0.3.16：核心验收与 npm 候选阶段
+
+2026-10-25。候选版保留四个旧宿主，增加 DSH `0.2.1-rc.3` 的精确声明和开发依赖；修复普通 Web 宿主先显示入口、点击才报错的问题，准备 npm 安装与迁移说明。此处记录候选包发布前的检查点：rc.3 桌面核心流程与真实模型回读已通过；先以 0.3.16-rc.1 发布到 npm next 完成真实 registry 迁移，再发布 0.3.16 稳定版。
+
+| 检查 | 本轮结果 |
+| --- | --- |
+| 更新 DSH 后被拒绝 | 官方 rc.3 payload 的检查器确认，0.3.15 的 `engines.dsh` 未包含 rc.3，返回不兼容且无豁免；修正声明后不再拦截。尚未取得反馈者的系统、具体版本和报错，因此不能将此原因归结为所有升级故障。 |
+| 工程检查 | rc.3 真实依赖下 typecheck、peer、lint、构建与包检查通过；32 文件 / 345 项回归通过，公开身份检查回归 23/23 通过。 |
+| 五版隔离安装 | `0.2.0-rc.2`、`0.2.1-alpha.4`、`0.2.1-rc.1`、`0.2.1-rc.2`、`0.2.1-rc.3` 均通过同包安装、依赖树核对和公开入口导入；这不是桌面完整功能验收。 |
+| 官方 rc.3 安装器与加载 | 使用 SHA-512 核验后的官方 macOS arm64 发布 payload；官方 Desktop CLI 安装成功，未授予兼容豁免，插件 Host 服务及读取工具注册成功。独立 Direct Desktop 冷启动后可见插件入口和原测试历史。 |
+| 原数据保留 | rc.2 独立测试环境安装前后，93 个配置、凭据、会话、附件等受保护文件的内容校验一致。只使用以前的独立测试数据，未读取、替换或升级日常 DSH。 |
+| 普通 Web 入口和中英菜单 | 独立官方 rc.2 Web profile：无 New Chat 入口；双击选文后 More details / 更多详情置灰，并给出对应语言的桌面能力说明；Add to chat / 添加到聊天保存批注后写入主草稿；API Side Chat 能打开并带入选文。 |
+| Web 旧引用 | 历史会话和引用卡恢复，正文预览可打开，无无效的 Open Web Chat 按钮。 |
+| rc.3 Host 引用与进程冷重启 | 实际已安装插件读取独立会话中已提交的两条历史引用，每条含两条消息。退出 Host 后启动新进程，完整快照哈希一致；已保存的网页登录记录仍可由插件读取。使用真实持久化会话及附件，没有模型调用；这不能替代模型主动调用或官网免登录验收。 |
+| 真实主模型调用 | 独立环境的持久化请求记录确认提供方为 `deepseek-account`、模型为 `deepseek-flash`、推理等级 `high`，服务端返回 HTTP 402 `Insufficient Balance` / `ACCOUNT_QUOTA`。维护者恢复额度后，rc.3 主模型实际调用 `read_webchat_reference`，返回新引用的两条消息、预期正文标记、与重启前相同的内容哈希、`partial` 和 `nextCursor: null`。账号身份与余额数值不进入公开材料；API 侧聊回复尚未补验。 |
+| 桌面交互补验 | 对照此前成功的 CUA 调用，在同一独立 rc.2 与 rc.3 中定位到输入操作和可访问性读数不同步；完整退出独立 rc.3 并确认进程结束后，以完整路径后台冷启动，输入与拖拽恢复。本轮 rc.3 已完成划词 → 更多详情 → 新建独立网页聊天 → 自动发送自定义 prompt、选文和来源背景 → 收到指定标记；添加到 DSH 保存两条消息快照并保留原草稿，预览正文正确。完整退出并确认进程结束后，后台冷启动恢复新引用、原草稿和自定义 prompt；正文哈希及采集时间保持一致。点击卡免登录重开同一网页，续聊收到预期标记；新建空白聊天后从插件历史重开同一讨论，无重复自动发送。验收后恢复默认 prompt。未切换桌面或改用其他电脑控制接口。 |
+| npm / 市场 / Release | 公开 npm 账号已核验，发布身份防护、打包范围和双语迁移文档已准备。此为 next 候选发布前检查点；tgz/Git → registry 迁移、移除旧 tgz 后的安装操作和最终包复核将在 0.3.16-rc.1 registry 包上进行。稳定版、市场索引及正式 Release 仅在通过后更新。 |
+
+**此检查点：核心流程通过，准备 npm next 候选迁移。** 正式 0.3.16 发布以 registry 补验结果为准。测试壳仅用于隔离应用标识、`DSH_HOME`、agents 目录与 Electron userData；官方运行代码未改动，不随插件发布。原始日志、登录文件、测试会话、网页地址及截图只保留在忽略的项目临时目录。
+
+English summary: this is the **pre-registry checkpoint** for 0.3.16. Five-version installation/imports, bilingual browser-hosted controls, and real rc.3 Host snapshot reads passed. After an isolated-app restart restored CUA input/readback, rc.3 passed selection-triggered automatic sending, a real web reply, reference capture, full Desktop restart recovery, signed-in reopening, follow-up, history reopening, and prompt persistence. The account-balance error was resolved; the main model then actually called `read_webchat_reference` and returned the expected two-message snapshot. Registry migration is verified first with **0.3.16-rc.1 on npm next**, before stable publication. Earlier release results below remain historical evidence.
+
 更新：2026-10-18。0.3.15 正式声明四版兼容，rc.1 在全新 profile 中无需豁免即可安装；发布前的工程检查与后续官方 rc.1 安装版升级分别记录。现有安装已从 0.3.14 升至 0.3.15，旧本机豁免已移除，登录态、历史和设置保留。0.3.14 的 rc.1 独立桌面流程与其他历史结果仍单独保留，不计作本轮重复验收。公开摘要不包含私人会话地址、账号、设备标识或原始聊天记录。
 
 ## 0.3.15：无需豁免的完整安装包

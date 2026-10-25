@@ -136,6 +136,38 @@ function install() {
   console.log('Installed identity hooks in this checkout only (core.hooksPath=.githooks).')
 }
 
+function checkPublishedTag(tag) {
+  checkEffectiveIdentity()
+  const ref = `refs/tags/${tag}`
+  const oid = git('rev-parse', '--verify', ref)
+  checkObject(oid, true)
+  if (run('gh', ['api', 'user', '--jq', '.login']) !== identity.name) fail('GitHub CLI must authenticate as the public account.')
+  const remote = git('ls-remote', '--refs', 'origin', ref).split('\n').filter(Boolean)
+  if (remote.length !== 1 || remote[0] !== `${oid}\t${ref}`) {
+    fail('The remote tag is missing or differs from the verified local tag. Push the verified tag first.')
+  }
+}
+
+function npmCheck() {
+  checkAll()
+  const manifest = JSON.parse(readFileSync(join(scriptRoot, 'package.json'), 'utf8'))
+  if (manifest.private === true || manifest.author?.name !== identity.name
+    || manifest.author?.url !== `https://github.com/${identity.name}`
+    || (manifest.author.email !== undefined && manifest.author.email !== identity.email)
+    || manifest.publishConfig?.registry !== 'https://registry.npmjs.org'
+    || manifest.publishConfig?.access !== 'public') {
+    fail('npm package author, registry, and visibility must use the public project settings.')
+  }
+  if (git('status', '--porcelain', '--untracked-files=no') !== '') fail('Commit the reviewed package before npm publication.')
+  const tag = `v${manifest.version}`
+  checkPublishedTag(tag)
+  if (git('rev-parse', `${tag}^{commit}`) !== git('rev-parse', 'HEAD')) fail('npm version tag must point to HEAD.')
+  if (run('npm', ['whoami', '--registry=https://registry.npmjs.org']).toLowerCase() !== identity.name.toLowerCase()) {
+    fail('npm must authenticate as the public rzrz-q account; rejected account omitted.')
+  }
+  console.log(`npm publication identity checks passed for ${manifest.name}@${manifest.version}.`)
+}
+
 function release(args) {
   const [tag, ...rest] = args
   if (!tag || tag.startsWith('-')) fail('Usage: release <tag> --title <title> --notes-file <file> [--draft] [--prerelease] [assets...]')
@@ -159,15 +191,7 @@ function release(args) {
   for (const path of [options.get('--notes-file'), ...assets]) {
     if (!existsSync(path)) fail('A release notes file or asset does not exist.')
   }
-  checkEffectiveIdentity()
-  const ref = `refs/tags/${tag}`
-  const oid = git('rev-parse', '--verify', ref)
-  checkObject(oid, true)
-  if (run('gh', ['api', 'user', '--jq', '.login']) !== identity.name) fail('GitHub CLI must authenticate as the public account.')
-  const remote = git('ls-remote', '--refs', 'origin', ref).split('\n').filter(Boolean)
-  if (remote.length !== 1 || remote[0] !== `${oid}\t${ref}`) {
-    fail('The remote tag is missing or differs from the verified local tag. Push the verified tag first.')
-  }
+  checkPublishedTag(tag)
   if (options.delete('--check-only')) {
     console.log(`Release identity checks passed for ${identity.repo} ${tag}; no release was created.`)
     return
@@ -192,7 +216,8 @@ try {
     case 'push': checkEffectiveIdentity(); checkUpdates(mode); break
     case 'check': checkAll(); console.log('Public identity checks passed.'); break
     case 'release': release(args); break
-    default: fail('Expected install, commit, ref-transaction, push, check, or release.')
+    case 'npm-check': npmCheck(); break
+    default: fail('Expected install, commit, ref-transaction, push, check, release, or npm-check.')
   }
 } catch (error) {
   console.error(`[public-identity] BLOCKED: ${error.message}`)

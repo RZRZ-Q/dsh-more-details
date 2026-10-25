@@ -20,6 +20,7 @@
 - `pre-commit` 检查有效 author / committer；`reference-transaction` 在分支、HEAD 或标签引用更新前检查实际对象和全部可达提交，覆盖 `--author`、amend、cherry-pick 及标签署名；`pre-push` 检查每个拟推送引用及其全部可达历史。名称、邮箱与 `Co-authored-by` 必须符合上表。
 - 提交、推送和发布前运行 `npm run identity:check`；校验读取原始 Git 对象，不接受 `.mailmap` 或 replacement object 对身份的替换。浅克隆须先补全历史。
 - 发布只能使用 `npm run release:publish -- <tag> --title <title> --notes-file <file> [assets...]`。入口核对有效身份、标签及全部可达提交、`gh` 账号，以及本地和远端标签对象一致性，随后才执行带 `--verify-tag` 的 Release 创建。
+- npm 发布使用专用公开账号 `rzrz-q`（对应 GitHub 公开身份的小写用户名），只从本仓库运行 `npm run npm:publish`。`prepublishOnly` 校验公开 Git 身份、作者字段、registry、工作区已提交、版本对应的远端 annotated tag 和 npm 当前账号。不得用 `--ignore-scripts` 或直接发布 tarball 跳过该校验；npm 账号不匹配或缺少权限时请维护者处理，不改用私人账号。该钩子只作用于本包，不修改全局 npm 配置。
 - 公开标签必须是 annotated tag，确保有可核验的 tagger；不要求额外配置 GPG / SSH 加密签名。
 - 不得通过禁用钩子、`--no-verify`、直接调用 `gh release create` 或网页发布来绕过检查。本地钩子和发布入口不是 GitHub 服务端权限控制，管理员仍可绕开；不能把它们描述成无法绕过的安全边界。
 - 改动校验器后运行 `npm run identity:test`，使用隔离的本地 Git 仓库验证拒绝行为，不向 GitHub 创建测试 Release。

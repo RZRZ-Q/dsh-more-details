@@ -4,6 +4,10 @@ export type WebChatMessage = string | {
     readonly zh: string;
     readonly en: string;
 };
+export declare const WEB_CHAT_DESKTOP_REQUIRED: {
+    zh: string;
+    en: string;
+};
 export declare function renderWebChatMessage(message: WebChatMessage, text: Localize): string;
 export declare class WebChatMessageError extends Error {
     readonly localizedMessage: WebChatMessage;

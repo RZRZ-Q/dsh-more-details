@@ -102,6 +102,37 @@ afterEach(() => {
 })
 
 describe('Side Chat overlay selection lifecycle', () => {
+  it('普通 Web 禁用更多详情且同步切换说明语言，选文添加仍可执行', async () => {
+    captureMocks.capture.mockResolvedValue(selectedPassage)
+    vi.spyOn(window, 'getSelection').mockReturnValue({ isCollapsed: false } as Selection)
+    const locale = localeFixture('zh')
+    const details = detailsFixture()
+    const sessions = {
+      ...EMPTY_CONVERSATION_INPUT,
+      subscribeList: () => () => {},
+      currentSessionId: () => SessionId('parent-1'),
+      face: () => ({ getSnapshot: () => ({}) }),
+      nextConversationAnnotationNumber: () => 1,
+      addSelectionToConversation: vi.fn(() => true),
+      notify: vi.fn(),
+    }
+    const controller = new SideChatController({} as SideChatRemote, sessions as unknown as SideChatClientSessions)
+    render(<><div data-chat-flow /><Rc6SideChatOverlay details={details.controller} controller={controller}
+      sessions={sessions as unknown as Rc6SideChatSessions} locale={locale.locale} webChatAvailable={false} /></>)
+    fireEvent.mouseUp(document.body)
+    const more = await screen.findByRole('button', { name: '更多详情' })
+    expect(more).toBeDisabled()
+    expect(more).toHaveAttribute('title', expect.stringContaining('官方 DSH 桌面端'))
+    fireEvent.click(more)
+    expect(details.start).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: '在侧边对话中提问' })).toBeEnabled()
+    act(() => { locale.setLanguage('en') })
+    expect(screen.getByRole('button', { name: 'More details' })).toHaveAttribute('title', expect.stringContaining('regular browser'))
+    fireEvent.click(screen.getByRole('button', { name: 'Add to chat' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }))
+    expect(sessions.addSelectionToConversation).toHaveBeenCalledOnce()
+  })
+
   it('follows the DSH language preference and live changes instead of the browser language', async () => {
     vi.spyOn(navigator, 'language', 'get').mockReturnValue('en-US')
     captureMocks.capture.mockResolvedValue(selectedPassage)

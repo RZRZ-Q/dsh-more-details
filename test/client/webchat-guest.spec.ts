@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
-import { DeepSeekGuest } from '../../src/client/webchat/guest.js'
+import { DeepSeekGuest, webChatBrowserBridge } from '../../src/client/webchat/guest.js'
 import type { DeepSeekPageSnapshot } from '../../src/client/webchat/deepseek-page.js'
 import type { DeepSeekLoginReadResult } from '../../src/client/webchat/login-page.js'
 import type { WebChatLoginState } from '../../src/shared/webchat-login.js'
@@ -90,6 +90,20 @@ afterEach(async () => {
 })
 
 describe('DeepSeek guest 生命周期与发送前错误', () => {
+  it('普通浏览器、未知协议和不完整桥接不会被当成可用的 Desktop guest', async () => {
+    const f = fixture()
+    expect(webChatBrowserBridge()).toBeDefined()
+    for (const desktop of [undefined, { protocolVersion: 2, browser: {} },
+      { protocolVersion: 1 }, { protocolVersion: 1, browser: { acquire: f.acquire } }]) {
+      vi.stubGlobal('dshDesktop', desktop)
+      expect(webChatBrowserBridge()).toBeUndefined()
+      await expect(f.guest.newChat()).rejects.toThrow('官方 DSH 桌面端')
+    }
+    expect(f.acquire).not.toHaveBeenCalled()
+    expect(f.loginStore.read).not.toHaveBeenCalled()
+    expect(f.elements).toHaveLength(0)
+  })
+
   it('已记住登录和 guest 标签可切换语言，不重建网页或读取改写凭据', async () => {
     const f = fixture()
     const language = localeFixture('zh')

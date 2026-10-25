@@ -330,3 +330,34 @@ test('release rejects a different GitHub account before querying the remote tag'
   }))
   assert.equal(readFileSync(calls, 'utf8').trim(), 'api user --jq .login')
 })
+
+test('npm publication checks the public account, committed package, and published version tag without publishing', () => {
+  const directory = fixture()
+  writeFileSync(join(directory, 'package.json'), JSON.stringify({
+    name: 'dsh-more-details', version: '1.0.0',
+    author: { name: publicName, url: `https://github.com/${publicName}` },
+    publishConfig: { registry: 'https://registry.npmjs.org', access: 'public' },
+  }))
+  succeeds(git(directory, ['add', 'package.json']))
+  succeeds(git(directory, ['commit', '--quiet', '-m', 'Public npm package']))
+  succeeds(git(directory, ['tag', '-a', 'v1.0.0', '-m', 'Public release']))
+  const bare = receiver(directory)
+  succeeds(git(directory, ['push', 'fixture', 'refs/tags/v1.0.0']))
+  const bin = join(directory, 'fake-bin')
+  mkdirSync(bin)
+  writeFileSync(join(bin, 'gh'), '#!/bin/sh\nprintf "RZRZ-Q\\n"\n', { mode: 0o755 })
+  writeFileSync(join(bin, 'npm'), '#!/bin/sh\n[ "$1" = whoami ] || exit 77\nprintf "%s\\n" "$NPM_FIXTURE_USER"\n', { mode: 0o755 })
+  const realGit = succeeds(run(directory, 'which', ['git']))
+  writeFileSync(join(bin, 'git'), '#!/bin/sh\nif [ "$1" = ls-remote ] && [ "$3" = origin ]; then shift 3; exec "$GIT_FIXTURE_REAL" ls-remote --refs "$GIT_FIXTURE_BARE" "$@"; fi\nexec "$GIT_FIXTURE_REAL" "$@"\n', { mode: 0o755 })
+  const env = { PATH: `${bin}:${environment.PATH}`, NPM_FIXTURE_USER: 'rzrz-q',
+    GIT_FIXTURE_REAL: realGit, GIT_FIXTURE_BARE: bare }
+  succeeds(guard(directory, ['npm-check'], { env }))
+  const rejected = guard(directory, ['npm-check'], { env: { ...env, NPM_FIXTURE_USER: 'fixture-private' } })
+  blocked(rejected)
+  assert.equal(rejected.stderr.includes('fixture-private'), false)
+  writeFileSync(join(directory, 'example.txt'), 'Uncommitted change\n')
+  blocked(guard(directory, ['npm-check'], { env }))
+  writeFileSync(join(directory, 'example.txt'), 'Public fixture\n')
+  succeeds(git(directory, ['commit', '--allow-empty', '--quiet', '-m', 'After release']))
+  blocked(guard(directory, ['npm-check'], { env }))
+})

@@ -1,12 +1,14 @@
 # 更多详情 · DSH Web Chat
 
+> **0.3.16-rc.1 为 npm 候选版。** Desktop rc.3 核心验收已通过，registry 迁移是剩余发布条件；通过前稳定版仍为 [0.3.15](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.15)。
+
 [English](README.md) | 简体中文
 
 **把旧版 Codex「更多详情」的交互体验带到 DeepSeek Harness。**
 
 在主会话里划词，进入右下角 DeepSeek 网页小窗展开讨论，再通过引用卡回到主会话。支持新建聊天、历史重开和继续追问，让讨论不中断手头的工作。
 
-[下载 v0.3.15](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.15) · [使用指南](docs/guide.zh.md) · [发布说明](docs/open-source/release-notes.md)
+[最新发布](https://github.com/RZRZ-Q/dsh-more-details/releases/latest) · [使用指南](docs/guide.zh.md) · [发布说明](docs/open-source/release-notes.md)
 
 ![DeepSeek 网页小窗与原 DSH 主会话并排展示。](docs/assets/screenshots/webchat.jpg)
 
@@ -36,9 +38,9 @@
 
 ## 快速上手
 
-支持 **DSH Desktop 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1 和 0.2.1-rc.2**。已在 macOS arm64 验收，逐版本范围见[验收记录](docs/open-source/validation.md)。Windows、Linux 尚未验证，网页小窗需要 Desktop。
+候选版兼容声明：**DSH Desktop 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3**。安装检查与历史桌面验收分开记录，逐版本范围见[验收记录](docs/open-source/validation.md)。Windows、Linux 尚未完成维护者功能验收。**网页讨论需要 Desktop。** 普通浏览器中的 DSH 会隐藏「新建 Chat」，将「更多详情」置灰并说明原因；添加到聊天、API 侧聊和已有引用的预览、读取仍可使用。
 
-1. 从[发布页](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.15)下载 **`dsh-more-details-0.3.15.tgz`**，通过 **插件 → 添加插件** 安装。若已安装原 AHGGG 插件，请停用它，避免重复划词菜单。
+1. 在 **插件 → 添加插件** 中通过 npm 安装 **`dsh-more-details@0.3.16-rc.1`**，也可使用[「发现」市场](docs/guide.zh.md#发现市场)。[Git 和 Release 安装包](docs/guide.zh.md#git-与-release-安装包)继续保留。若已安装原 AHGGG 插件，请停用它，避免重复划词菜单。
 2. 完整退出并重开 DSH。点击 **新建 Chat**，在小窗内登录官网。网页登录与 DSH 模型账号配置分开。
 3. 在已完成的消息中划词，点击 **更多详情**。可在 **提示词** 中保存自定义指令，内置默认值为「告诉我更多相关信息」。
 4. 在小窗继续追问，用 **历史** 重开讨论，或用 **新建** 打开空白聊天。

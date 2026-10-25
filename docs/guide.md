@@ -1,10 +1,12 @@
 # User and development guide
 
+> **0.3.16-rc.1 is an npm candidate.** Desktop rc.3 core acceptance passed; registry migration is the remaining release gate. The stable release stays at [0.3.15](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.15) until that check passes.
+
 [Project overview](../README.md) · [Chinese guide](guide.zh.md)
 
 ## Supported environments
 
-Current version: **0.3.14**, supporting **DSH 0.2.0-rc.2, 0.2.1-alpha.4, and 0.2.1-rc.2**. The web panel requires Desktop's browser guest; browser-only DSH is outside the current support scope. Windows and Linux have not been validated.
+Candidate version: **0.3.16-rc.1**, declaring **DSH 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, and 0.2.1-rc.3**. Web Chat needs the official Desktop browser guest. In an ordinary browser, the plugin hides New Chat and disables More details with an explanation. Add to chat, API side chat, saved-reference previews, and on-demand snapshot reading remain available; reopening the website inside the plugin is Desktop-only. Windows/Linux full feature acceptance is still unverified.
 
 Validation is recorded by release rather than implied for every update:
 
@@ -19,36 +21,45 @@ See [version compatibility](open-source/compatibility.md), [validation records](
 
 ## Installation and upgrades
 
-### Release package
+### npm (recommended)
 
-1. Download `dsh-more-details-0.3.14.tgz` from the [v0.3.14 release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.14). The release also includes the source archive and `SHA256SUMS`.
-2. Install and enable it through DSH's **Plugins → Add plugin**. To upgrade, use the same Desktop profile and keep its existing data.
-3. Disable the original AHGGG plugin if it is installed, to avoid duplicate selection menus.
-4. Fully quit and reopen DSH so the Host loads the new configuration and RPC interfaces. Reloading only the plugin can retain cached interfaces.
+In **Plugins → Add plugin**, enter `dsh-more-details@0.3.16-rc.1`. DSH installs the precompiled package from npm and checks host compatibility. Use the same profile when upgrading; changing the package source does not require removing plugin data.
 
-### Discover in DSH 0.2.1-alpha.4 and 0.2.1-rc.2
-
-1. In **Plugins → Experimental plugins → More**, enable **Custom plugin market**.
-2. Open **Discover → Add index source** and paste:
-
-   ```text
-   https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json
-   ```
-
-3. Select **More Details · Web Chat**, check the repository and pinned commit in the installation confirmation, and install it.
-4. Disable any duplicate original plugin, then fully quit and reopen DSH.
-
-The index is maintained by this plugin's author; it is not a DeepSeek-endorsed catalog. It points to immutable Git commits and does not require npm publication. DSH 0.2.0-rc.2 does not have Discover; use the release package instead. The web panel still requires Desktop.
-
-### Desktop CLI
-
-Use the **CLI bundled with Desktop**. This macOS example assumes the app is installed under `~/Applications`; adjust the path if needed:
+For the Desktop CLI, use the **CLI bundled with your Desktop installation**. Fully quit the test/target DSH instance before a CLI installation, then reopen it. This macOS example assumes `~/Applications`; adjust the executable path for your installation:
 
 ```sh
-"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add /absolute/path/dsh-more-details-0.3.14.tgz
+"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.16-rc.1
 ```
 
-Fully quit and reopen DSH after installation or an upgrade. Do not use a separately installed CLI to modify the Desktop profile.
+For browser-hosted DSH, use its own CLI and profile, for example `dsh plugin --profile web add dsh-more-details@0.3.16-rc.1`. Do not use a separately installed CLI to manage the Desktop profile, or run bare `pnpm add` in an arbitrary directory. Future upgrades use the same command with the desired compatible version.
+
+### Discover
+
+DSH 0.2.1-alpha.4, 0.2.1-rc.1, and 0.2.1-rc.2 support the author's native market index:
+
+1. In **Plugins → Experimental plugins → More**, enable **Custom plugin market**.
+2. In **Discover → Add index source**, add `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json`.
+3. Select **More Details · Web Chat**, review the version/source, and install it.
+
+New versions use an exact npm version; older entries retain their pinned Git commits. The index allows one source per version, so Git and npm are not duplicate entries for the same version. This is an author-maintained catalog, not a DeepSeek endorsement. DSH 0.2.0-rc.2 has no Discover; use npm through its installer/CLI or a release archive.
+
+### Git and release archives
+
+- **Git:** use the full public commit associated with the desired release: `git+https://github.com/RZRZ-Q/dsh-more-details.git#<full-commit>`. Enter it in **Add plugin** or pass it to the bundled `dsh plugin --profile desktop add` command. Built runtime files are committed.
+- **Archive:** download `dsh-more-details-0.3.16.tgz` from the [release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.16) and install via **Add plugin**. The source archive and `SHA256SUMS` are provided separately.
+
+A local archive can remain a `file:` dependency of the profile. Keep the archive at its recorded path while that dependency exists; moving or deleting it can block other package operations in the same profile. Prefer npm for installations that should not depend on local archive storage.
+
+### Migrate an existing tgz or Git installation
+
+1. Back up the target profile and fully quit that DSH instance before CLI changes. Keep the same profile, plugin name, credentials, attachments, and browser data.
+2. Install `dsh-more-details@0.3.16-rc.1` through the matching DSH installer/CLI. This replaces the package source; do not uninstall the plugin and delete its data first.
+3. Reopen DSH and check the version, custom prompt, history, existing references, and remembered website sign-in. Website sessions can expire independently.
+4. Remove the old archive only after the profile's dependency for this plugin no longer points to it and another plugin/package operation succeeds.
+
+If the old tgz is already missing and migration fails, restore that exact archive to the path named in the error first, then retry the source replacement. Do not delete the profile, credentials, conversations, or attachments to repair a package path.
+
+After installation, disable a duplicate AHGGG plugin and fully quit/reopen DSH so both Host and Client load the new version.
 
 ## Use a web discussion
 
@@ -139,7 +150,7 @@ mkdir -p dist
 npm pack --ignore-scripts --pack-destination dist
 ```
 
-The repository includes built `lib/` artifacts. `private: true` in `package.json` prevents accidental npm publication; it does not prevent open-source distribution, local packaging, or DSH installation. Distribution uses GitHub Releases and the native market index. The plugin is not published to npm. Community DSH-Store submission status and capability disclosures are tracked in [distribution](open-source/distribution.md); submission is not store approval.
+The repository includes built `lib/` artifacts. npm publication is restricted by the repository identity guard and runs only from reviewed, committed source with a matching remote annotated tag. Consumer installation does not run the maintainer publication checks. GitHub Releases and the native market index remain distribution channels. Community DSH-Store submission status and capability disclosures are tracked in [distribution](open-source/distribution.md); submission is not store approval.
 
 Issues and pull requests are welcome in English or Chinese. Use concise English titles for new commits in the form `type(scope): summary`, with an optional scope, for example `docs: add bilingual readmes`. A commit body may include Chinese explanations when useful. Keep published history intact. Update both READMEs and the relevant guide sections when features, installation steps, or compatibility change. Detailed validation and comparison documents are currently maintained in Chinese. New release notes use English with a Chinese version.
 

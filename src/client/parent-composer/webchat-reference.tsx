@@ -51,19 +51,19 @@ export function addWebChatReference(input: ParentComposerInput, reference: WebCh
 }
 
 /** 草稿 chip 使用 DSH 官方 openReference 钩子，避免伪装成 DSH Session ID。 */
-export function createWebChatReferenceSource(onOpen: OpenWebChatReference, locale: DshLocale): SelectionReferenceSource {
+export function createWebChatReferenceSource(onOpen: OpenWebChatReference | undefined, locale: DshLocale): SelectionReferenceSource {
   const decode = (ref: string): WebChatReference => decodeReference(ref, locale.resolveText({
     zh: '网页讨论引用已失效，请重新添加。', en: 'This web discussion reference is invalid. Please add it again.',
   }))
   return {
     trigger: '@', name: WEBCHAT_REFERENCE_SOURCE, order: 1_002,
     candidates: async () => [], onPick: () => undefined,
-    openReference: (_session, reference) => {
+    ...onOpen === undefined ? {} : { openReference: (_session, reference) => {
       let decoded: WebChatReference
       try { decoded = decode(reference.ref) } catch { return false }
       onOpen(decoded)
       return true
-    },
+    } },
     codec: {
       clipboardText: ref => `@${decode(ref).title}`,
       serialize: async (ref, signal) => {

@@ -15,6 +15,21 @@ import { localeFixture } from '../fixtures/locale.js'
 afterEach(cleanup)
 
 describe('网页讨论引用', () => {
+  it('没有 guest 时保留快照预览和序列化，移除草稿与消息卡的重开入口', async () => {
+    const locale = localeFixture('en').locale
+    const reference = webChatReferenceFixture()
+    const source = createWebChatReferenceSource(undefined, locale)
+    expect(source.openReference).toBeUndefined()
+    const serialized = await source.codec.serialize(JSON.stringify(reference), new AbortController().signal)
+    expect(parseWebChatReferencePrompt(serialized)?.reference).toMatchObject(reference)
+    expect(serialized).toContain('read_webchat_reference')
+    render(<WebChatReferenceCard reference={reference} locale={locale} />)
+    expect(screen.queryByRole('button', { name: 'Open Web Chat' })).not.toBeInTheDocument()
+    fireEvent.click(screen.getByText('Preview reference'))
+    expect(document.querySelector('details')).toHaveAttribute('open')
+    expect(screen.getByText(/const value = 3.24/)).toBeInTheDocument()
+  })
+
   it('编辑接受后即返回成功，等真实 commit 才通知持久化和呈现预览', () => {
     const fixture = deferredComposerReferenceFixture('保留的主会话草稿')
     const committed = vi.fn()

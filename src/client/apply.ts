@@ -12,7 +12,7 @@ import { moreDetailsConversationReferenceSource } from './parent-composer/refere
 import { createWebChatReferenceSource } from './parent-composer/webchat-reference.js'
 import webChatReferenceCss from './parent-composer/webchat-reference.css'
 import { WebChatController } from './webchat/controller.js'
-import { DeepSeekGuest } from './webchat/guest.js'
+import { DeepSeekGuest, webChatBrowserBridge } from './webchat/guest.js'
 import { WebChatPanel, WebChatLauncher, type WebChatPreferences } from './webchat/WebChatPanel.js'
 import webChatCss from './webchat/webchat.css'
 import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
@@ -56,28 +56,33 @@ export async function apply(ctx: Context): Promise<void> {
     cleanups.push(clientCtx.inputTriggers.registerSource(moreDetailsConversationReferenceSource))
     const sessions = new DshSideChatSessions(clientCtx)
     cleanups.push(mountMoreDetailsSettings(ctx))
+    const webChatAvailable = webChatBrowserBridge() !== undefined
     const guest = new DeepSeekGuest(mounted.loginStore)
     cleanups.push(() => guest.dispose())
     const details = new WebChatController(guest, mounted.prepareDetails, sessions, window.localStorage, mounted.saveWebChatReference,
       (zh, en) => ctx.locale.resolveText({ zh, en }))
-    const openWebChatReference = (reference: { readonly url: string }): void => { void details.openHistory(reference.url) }
+    const openWebChatReference = webChatAvailable
+      ? (reference: { readonly url: string }): void => { void details.openHistory(reference.url) }
+      : undefined
     cleanups.push(clientCtx.inputTriggers.registerSource(createWebChatReferenceSource(openWebChatReference, ctx.locale)))
     cleanups.push(mountParentConversationAnnotations(clientCtx,
       sessionId => { sessions.removeConversationAnnotations(sessionId) }, openWebChatReference))
     guest.observe(page => details.observePage({ url: page.url, title: page.title }))
     cleanups.push(() => details.dispose())
-    const form = ctx.configForms.get<WebChatPreferences>('more-details')
-    cleanups.push(clientCtx.slots.inject('shell.overlay', () => clientCtx.slots.register({
-      name: 'shell.overlay', id: 'dsh-more-details-webchat', order: 91,
-    }, () => createElement(WebChatPanel, { controller: details, guest, form, locale: ctx.locale }))))
-    cleanups.push(clientCtx.slots.inject('sidebar.footer.action', () => clientCtx.slots.register({
-      name: 'sidebar.footer.action', id: 'dsh-more-details-new-chat', order: 10,
-    }, ({ wide }) => createElement(WebChatLauncher, { controller: details, locale: ctx.locale, wide }))))
+    if (webChatAvailable) {
+      const form = ctx.configForms.get<WebChatPreferences>('more-details')
+      cleanups.push(clientCtx.slots.inject('shell.overlay', () => clientCtx.slots.register({
+        name: 'shell.overlay', id: 'dsh-more-details-webchat', order: 91,
+      }, () => createElement(WebChatPanel, { controller: details, guest, form, locale: ctx.locale }))))
+      cleanups.push(clientCtx.slots.inject('sidebar.footer.action', () => clientCtx.slots.register({
+        name: 'sidebar.footer.action', id: 'dsh-more-details-new-chat', order: 10,
+      }, ({ wide }) => createElement(WebChatLauncher, { controller: details, locale: ctx.locale, wide }))))
+    }
     const controller = new SideChatController(mounted.remote, sessions)
     cleanups.push(() => controller.dispose())
     cleanups.push(clientCtx.slots.inject('shell.overlay', () => clientCtx.slots.register({
       name: 'shell.overlay', id: 'dsh-more-details', order: 90,
-    }, () => createElement(SideChatOverlay, { controller, sessions, details, locale: ctx.locale }))))
+    }, () => createElement(SideChatOverlay, { controller, sessions, details, webChatAvailable, locale: ctx.locale }))))
   } catch (error) {
     await cleanup()
     throw error

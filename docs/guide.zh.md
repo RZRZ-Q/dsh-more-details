@@ -1,10 +1,12 @@
 # 使用与开发指南
 
+> **0.3.16-rc.1 为 npm 候选版。** Desktop rc.3 核心验收已通过，registry 迁移是剩余发布条件；通过前稳定版仍为 [0.3.15](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.15)。
+
 [项目简介](../README.zh.md) · [English guide](guide.md)
 
 ## 支持环境
 
-当前版本 **0.3.14**，支持 **DSH 0.2.0-rc.2、0.2.1-alpha.4 与 0.2.1-rc.2**。网页小窗依赖 Desktop 的 browser guest，不支持普通浏览器宿主；Windows、Linux 尚未验收。
+当前版本 **0.3.16-rc.1**，支持 **DSH 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3**。网页讨论需要官方 Desktop browser guest。普通浏览器中隐藏「新建 Chat」，「更多详情」置灰并说明原因；添加到聊天、API 侧聊、已有引用预览和按需读取仍保留，插件内重开官网仅 Desktop 可用。Windows/Linux 全功能尚未完成验收。
 
 各版本的验证范围分别记录，不将旧版验收结果视为每次更新都重新执行：
 
@@ -19,36 +21,45 @@
 
 ## 安装与升级
 
-### Release 安装包
+### npm（推荐）
 
-1. 从 [v0.3.14 发布页](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.14) 下载 `dsh-more-details-0.3.14.tgz`；发布页同时提供源码包与 `SHA256SUMS`。
-2. 在 DSH **插件 → 添加插件** 中安装并启用。升级时使用同一个 Desktop profile，保留原数据。
-3. 如果安装过原 AHGGG 插件，请将其停用，避免两套划词菜单重叠。
-4. 完整退出并重开 DSH，让 Host 加载新的配置与 RPC 接口；只重新加载插件可能沿用旧接口缓存。
+在 **插件 → 添加插件** 中输入 `dsh-more-details@0.3.16-rc.1`。DSH 从 npm 安装预编译包并检查宿主兼容性。升级时继续使用原 profile，更换包来源不需要删除插件数据。
 
-### 从「发现」安装：DSH 0.2.1-alpha.4 与 0.2.1-rc.2
-
-1. 在 **插件 → 实验性插件 → 更多** 中启用 **自定义插件市场**。
-2. 打开 **发现 → 添加索引源**，填入：
-
-   ```text
-   https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json
-   ```
-
-3. 选择 **更多详情 · 网页讨论**，在安装确认中核对仓库和固定提交后安装。
-4. 停用可能重复的原插件，然后完整退出并重开 DSH。
-
-此索引由插件作者维护，不代表 DeepSeek 官方背书；安装指向不可变 Git 提交，无需发布 npm。DSH 0.2.0-rc.2 没有「发现」入口，请使用 Release 安装包；网页小窗仍需要 Desktop。
-
-### Desktop CLI
-
-请使用 **Desktop 自带的 CLI**。以下为 macOS 示例，应用安装位置不同请调整路径：
+Desktop CLI 必须使用**对应桌面安装自带的 CLI**。通过 CLI 安装前完整退出目标 DSH 实例，安装后重开。下面的 macOS 示例假设应用位于 `~/Applications`，请按实际安装位置调整：
 
 ```sh
-"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add /absolute/path/dsh-more-details-0.3.14.tgz
+"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.16-rc.1
 ```
 
-安装或升级后完整退出并重开 DSH。不要用另一套独立安装的 CLI 修改 Desktop profile。
+浏览器宿主使用自己的 CLI 和 profile，例如 `dsh plugin --profile web add dsh-more-details@0.3.16-rc.1`。不要使用另外安装的 CLI 管理 Desktop profile，也不要在任意目录直接执行 `pnpm add`。后续升级沿用同一命令，将版本号替换为需要的兼容版本。
+
+### 发现市场
+
+DSH 0.2.1-alpha.4、0.2.1-rc.1 和 0.2.1-rc.2 支持作者维护的原生市场索引：
+
+1. 在 **插件 → 实验性插件 → 更多** 中启用 **自定义插件市场**。
+2. 在 **发现 → 添加索引源** 中添加 `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json`。
+3. 选择 **更多详情 · 网页讨论**，核对版本和来源后安装。
+
+新版本使用精确 npm 版本，旧版本条目保留固定 Git commit。一个版本只能有一个市场来源，不会把 npm 和 Git 重复列为同一版本的两个条目。这是作者维护的索引，不代表 DeepSeek 官方背书。DSH 0.2.0-rc.2 没有「发现」，可通过安装器/CLI 使用 npm，或安装 Release 归档。
+
+### Git 与 Release 安装包
+
+- **Git**：使用目标 Release 对应的完整公开 commit：`git+https://github.com/RZRZ-Q/dsh-more-details.git#<full-commit>`。在「添加插件」中输入，或交给自带的 `dsh plugin --profile desktop add` 命令。仓库已提交构建运行产物。
+- **归档**：从[发布页](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.16)下载 `dsh-more-details-0.3.16.tgz`，通过「添加插件」安装；源码包和 `SHA256SUMS` 单独提供。
+
+本地归档可能作为 profile 的 `file:` 依赖保留。只要依赖仍指向该文件，就应保留它及其记录路径；移动或删除可能阻塞同一 profile 的其他包操作。希望摆脱本地归档依赖的安装优先使用 npm。
+
+### 从已有 tgz 或 Git 安装迁移
+
+1. 备份目标 profile；执行 CLI 更改前完整退出该 DSH 实例。保持同一 profile、插件名称、凭据、附件和浏览器数据。
+2. 通过对应 DSH 安装器/CLI 安装 `dsh-more-details@0.3.16-rc.1`，替换包来源；不需要先卸载插件并删除其数据。
+3. 重开 DSH，检查版本、自定义 prompt、历史、原引用及已记住的网页登录。官网会话本身仍可能独立到期。
+4. 确认该插件的 profile 依赖不再指向旧归档，且另一项插件/包操作成功后，再删除旧归档。
+
+如果旧 tgz 已丢失，导致迁移失败，先将同一版本归档恢复到报错中的准确路径，再更换来源。不要通过删除 profile、凭据、会话或附件来修复包路径。
+
+安装后停用重复的 AHGGG 插件，并完整退出、重开 DSH，让 Host 和 Client 都加载新版本。
 
 ## 使用网页讨论
 
@@ -139,7 +150,7 @@ mkdir -p dist
 npm pack --ignore-scripts --pack-destination dist
 ```
 
-仓库保留 `lib/` 构建产物。`package.json` 的 `private: true` 用于防止误发 npm，不影响源码开源、本地打包或 DSH 安装。当前通过 GitHub Release 和原生市场索引分发，未发布 npm。社区 DSH-Store 的申请状态与能力披露见[分发说明](open-source/distribution.md)；提交申请不代表审核通过。
+仓库保留 `lib/` 构建产物。npm 发布受本仓库身份检查保护，只允许从已审阅、已提交且有匹配远端 annotated tag 的源码执行；用户安装不会运行维护者发布检查。GitHub Release 与原生市场索引继续保留。社区 DSH-Store 的申请状态与能力披露见[分发说明](open-source/distribution.md)；提交申请不代表审核通过。
 
 Issue 和 PR 可使用中文或英文。新 commit 标题统一使用简短英文，格式为 `type(scope): summary`，其中 scope 可省略，例如 `docs: add bilingual readmes`；需要时可在正文补充中文说明。保留已发布的提交历史。修改功能、安装方式或兼容范围时，请同步更新两份 README 和相应指南章节。详细验收与对比文档目前以中文维护；新的发布说明以英文为主，并提供中文版。
 

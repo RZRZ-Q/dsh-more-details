@@ -95,7 +95,7 @@ export function MoreDetailsSettings({ locale, usePromptSettings, savePrompt, res
       onSubmit={event => { event.preventDefault(); void persist(false) }}>
       <style>{styles}</style>
       <h3 id={`${id}-title`}>{text('更多详情', 'More details')}</h3>
-      <p id={`${id}-description`}>{text('划词后点击“更多详情”，会在右下角 DeepSeek 网页聊天中自动发送以下提示词；选文和来源背景会自动附加。', 'Select text and choose More details to send this prompt in the bottom-right DeepSeek Web Chat. The selection and source context are included automatically.')}</p>
+      <p id={`${id}-description`}>{text('在官方 DSH 桌面端划词后点击“更多详情”，会在右下角 DeepSeek 网页聊天中自动发送以下提示词；选文和来源背景会自动附加。', 'In the official DSH desktop app, select text and choose More details to send this prompt in the bottom-right DeepSeek Web Chat. The selection and source context are included automatically.')}</p>
       <label htmlFor={id}>{text('默认提示词', 'Default prompt')}</label>
       <textarea id={id} rows={5} value={value} disabled={!writable || pending}
         aria-describedby={`${id}-description${blank ? ` ${id}-validation` : ''}`}

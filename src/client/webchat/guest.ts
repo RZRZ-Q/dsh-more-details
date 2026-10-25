@@ -3,7 +3,7 @@ import {
   type DeepSeekActionResult, type DeepSeekPageSnapshot, type DeepSeekReceipt,
 } from './deepseek-page.js'
 import type { WebChatPort } from './controller.js'
-import { WebChatMessageError, type WebChatMessage } from './messages.js'
+import { WEB_CHAT_DESKTOP_REQUIRED, WebChatMessageError, type WebChatMessage } from './messages.js'
 import type { WebChatLoginStore } from '../../shared/webchat-login.js'
 import type { WebChatCapture } from '../../shared/webchat-reference.js'
 import { deepSeekCaptureScript, type DeepSeekCaptureResult } from './deepseek-capture.js'
@@ -18,6 +18,17 @@ interface BrowserBridge {
   acquire(workspace: string): Promise<Reservation>
   release(lease: string): Promise<void>
   onOpenRequested(lease: string, listener: (url: string) => void): () => void
+}
+
+/** 在注册入口和真正创建 guest 时检查宿主能力；Web 渲染器也会在普通浏览器中加载。 */
+export function webChatBrowserBridge(): BrowserBridge | undefined {
+  const desktop = (globalThis as unknown as { dshDesktop?: { protocolVersion?: number; browser?: Partial<BrowserBridge> } }).dshDesktop
+  const browser = desktop?.browser
+  return desktop?.protocolVersion === 1
+    && typeof browser?.acquire === 'function'
+    && typeof browser.release === 'function'
+    && typeof browser.onOpenRequested === 'function'
+    ? browser as BrowserBridge : undefined
 }
 interface Webview extends HTMLElement {
   loadURL(url: string): Promise<void>
@@ -100,12 +111,12 @@ export class DeepSeekGuest implements WebChatPort {
   private async createGuest(): Promise<void> {
     this.lastFailure = undefined
     this.preparedUrl = undefined
-    const desktop = (globalThis as unknown as { dshDesktop?: { protocolVersion: number; browser: BrowserBridge } }).dshDesktop
-    if (desktop?.protocolVersion !== 1) throw new WebChatMessageError({ zh: 'Web Chat 需要官方 DSH 桌面端的浏览器接口。', en: 'Web Chat requires the browser interface in the official DSH desktop app.' })
+    const browser = webChatBrowserBridge()
+    if (browser === undefined) throw new WebChatMessageError(WEB_CHAT_DESKTOP_REQUIRED)
     if (this.container === undefined) throw new WebChatMessageError({ zh: 'Web Chat 面板尚未挂载。', en: 'The Web Chat panel is not mounted yet.' })
-    this.bridge = desktop.browser
-    const reservation = await desktop.browser.acquire('dsh-more-details-webchat')
-    if (this.disposed) { await desktop.browser.release(reservation.lease); return }
+    this.bridge = browser
+    const reservation = await browser.acquire('dsh-more-details-webchat')
+    if (this.disposed) { await browser.release(reservation.lease); return }
     this.reservation = reservation
     const element = document.createElement('webview') as Webview
     this.element = element
@@ -128,7 +139,7 @@ export class DeepSeekGuest implements WebChatPort {
         if (this.poll !== undefined) void this.observeNow()
       })
     }
-    this.unsubscribe = desktop.browser.onOpenRequested(reservation.lease, url => {
+    this.unsubscribe = browser.onOpenRequested(reservation.lease, url => {
       if (new URL(url).origin === new URL(HOME).origin) {
         void element.loadURL(url).catch(error => { this.lastFailure = String(error) })
       }

@@ -2,10 +2,13 @@
 
 English | [简体中文](#简体中文)
 
+> 0.3.16-rc.1 uses npm next for registry migration acceptance. Stable publication and the new market entry follow that check; previous entries remain pinned to Git.
+
 ## Distribution channels
 
+- The npm channel provides the precompiled `dsh-more-details` package. Use DSH’s own plugin installer/CLI; tgz/Git migration keeps the same package identity and data. [Installation and recovery steps](../guide.md#installation-and-upgrades).
 - GitHub Releases provide the installable package, public source archive, and checksums.
-- [`market/index.json`](../../market/index.json) is the author's native DSH market index. Add `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json` in DSH 0.2.1-alpha.4, 0.2.1-rc.1, or 0.2.1-rc.2's **Discover** tab. Every version points to an immutable Git commit. DSH 0.2.0-rc.2 users can continue installing release packages.
+- [`market/index.json`](../../market/index.json) is the author's native DSH market index. Add `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json` in DSH 0.2.1-alpha.4, 0.2.1-rc.1, or 0.2.1-rc.2's **Discover** tab. After registry verification, 0.3.16 will use one exact npm source; older entries retain immutable Git commits. A version cannot have duplicate entries for different sources. DSH 0.2.0-rc.2 users can use its installer/CLI or release packages.
 - The repository uses the official community-discovery topic [`dsh-plugin`](https://github.com/topics/dsh-plugin).
 - [DSH-Store](https://github.com/AI-Scarlett/DSH-Store) is an independent community store. Submission and static scanning do not imply admission, a security audit, or DeepSeek endorsement.
 
@@ -28,10 +31,13 @@ The 0.3.15 compatibility declaration covers exactly `0.2.0-rc.2`, `0.2.1-alpha.4
 
 ## 简体中文
 
+> 0.3.16-rc.1 使用 npm next 验收 registry 迁移；通过后更新稳定版和新市场条目，旧条目继续固定到 Git。
+
 ### 分发渠道
 
+- 计划新增的 npm 渠道提供预编译 `dsh-more-details` 包，通过 DSH 自带安装器/CLI 安装；tgz/Git 迁移保持同一插件标识及数据。详见[安装与恢复步骤](../guide.zh.md#安装与升级)。
 - GitHub Release 提供安装包、公开源码包及校验值。
-- [`market/index.json`](../../market/index.json) 是作者维护的 DSH 原生市场索引，DSH 0.2.1-alpha.4、0.2.1-rc.1 或 0.2.1-rc.2 用户可在「发现」中添加 `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json`。每个版本固定到不可变 Git 提交；DSH 0.2.0-rc.2 继续使用 Release 安装包。
+- [`market/index.json`](../../market/index.json) 是作者维护的 DSH 原生市场索引，DSH 0.2.1-alpha.4、0.2.1-rc.1 或 0.2.1-rc.2 用户可在「发现」中添加 `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json`。registry 验收完成后，0.3.16 将使用单一精确 npm 来源，旧条目保留不可变 Git 提交；同一版本不能重复声明不同来源；DSH 0.2.0-rc.2 可使用安装器/CLI 或 Release 安装包。
 - 仓库使用官方推荐的社区发现 topic：[`dsh-plugin`](https://github.com/topics/dsh-plugin)。
 - [DSH-Store](https://github.com/AI-Scarlett/DSH-Store) 是独立社区商店；提交或静态扫描不代表已收录、独立安全审计或 DeepSeek 官方认可。
 
@@ -48,3 +54,9 @@ The 0.3.15 compatibility declaration covers exactly `0.2.0-rc.2`, `0.2.1-alpha.4
 插件没有 `preinstall`、`install`、`postinstall` 或 `prepare`；`prepack` 用于维护者构建分发包，Git 安装可使用已提交的运行产物。没有运行时 `dependencies` / `optionalDependencies`，宿主接口由 peer 提供，Zod 随包构建并保留许可。
 
 0.3.15 精确声明兼容 `0.2.0-rc.2`、`0.2.1-alpha.4`、`0.2.1-rc.1` 与 `0.2.1-rc.2`；完整的 0.3.15 安装包在 rc.1 上无需本机兼容豁免。桌面功能验收范围为 macOS arm64，不将 Windows、Linux、其他版本或普通浏览器中的 Web Chat 标为已验收。逐版本结果见[兼容说明](compatibility.md)与[验收记录](validation.md)。
+
+## Web host behavior / Web 宿主行为
+
+Without the supported Desktop browser bridge, the client does not register the Web Chat panel or New Chat launcher. More details is disabled with a localized explanation; reference reopening is omitted while preview/serialization and Host on-demand reading remain. No iframe, cross-origin bypass, or manual-import fallback is added.
+
+没有支持的 Desktop 浏览器桥接时，不注册网页小窗或「新建 Chat」，「更多详情」显示本地化禁用原因；引用移除重开入口，但保留预览、序列化和 Host 按需读取。本版不加入 iframe、跨域绕过或手动导入降级路径。

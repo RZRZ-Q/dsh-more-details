@@ -24,6 +24,7 @@ import { DshSideChatSessions, selectionDescriptor } from './sessions-adapter.js'
 import { useDshLocale, type DshLocale } from './locale.js'
 
 import type { WebChatController } from '../webchat/controller.js'
+import { WEB_CHAT_DESKTOP_REQUIRED } from '../webchat/messages.js'
 const TOUCH_SELECTION_SETTLE_MS = 300
 const TOUCH_ACTIVATION_SUPPRESS_MS = 750
 
@@ -49,10 +50,12 @@ export function SideChatOverlay({
   controller,
   sessions,
   details,
+  webChatAvailable = true,
   locale: localeService,
 }: {
   readonly locale: DshLocale
   readonly details: Pick<WebChatController, 'subscribe' | 'getSnapshot' | 'start'>
+  readonly webChatAvailable?: boolean
   readonly controller: SideChatController
   readonly sessions: DshSideChatSessions
 }) {
@@ -345,7 +348,9 @@ export function SideChatOverlay({
           touchInteraction={activeSelection.touch}
           annotationNumber={sessions.nextConversationAnnotationNumber()}
           {...askDisabledReason === undefined ? {} : { askDisabledReason }}
-          {...detailState.busy || detailState.pending !== undefined
+          {...!webChatAvailable
+            ? { moreDetailsDisabledReason: text(WEB_CHAT_DESKTOP_REQUIRED.zh, WEB_CHAT_DESKTOP_REQUIRED.en) }
+            : detailState.busy || detailState.pending !== undefined
             ? { moreDetailsDisabledReason: detailState.busy
                 ? text('正在处理更多详情请求', 'A More details request is in progress.')
                 : text('请先处理小窗中的待发送请求', 'Handle the pending request in the Web Chat window first.') }
