@@ -19,6 +19,24 @@
 
 English summary: on an isolated macOS arm64 DSH 0.2.1-rc.3 Desktop, installation preserved all 110 protected files, and all 147 installed package files matched the tested archive. Sidebar New Chat opened a blank discussion and received a real reply. Manual collapse, Add to DSH, collapse from History, and a half-width window all restored the same URL, one question/reply pair, and unsent website draft without creating or sending again. The main send control remained unobstructed; clicking it sent a multiline draft with a reference and received the expected reply. Engineering checks passed 349 tests and 23 identity tests. Automatic selection sending, main-model reference-tool reading, and full restart recovery were not rerun in this patch.
 
+## 官方 DSH 0.2.1-rc.1 安装版：0.3.15 → 0.3.17 升级
+
+2026-10-26，在现有官方 macOS arm64 DSH `0.2.1-rc.1` 中，通过该 Desktop 自带的官方 CLI，从 npm registry 安装 `dsh-more-details@0.3.17`。安装前确认应用未运行并备份原数据，随后通过 CUA 后台打开原应用验收。沿用原 profile、`DSH_HOME` 和 Electron userData，未升级 DSH 客户端或切换桌面。
+
+| 检查项 | 结果 |
+| --- | --- |
+| 安装与客户端版本 | 插件从 0.3.15 升至 0.3.17，安装后的 147 个分发文件与已发布安装包逐字节一致。客户端仍为 `0.2.1-rc.1`，`Info.plist`、主可执行文件及 `app.asar` 校验值未变。 |
+| 登录态、历史和设置 | 无需重新登录即可打开官网聊天；原八条插件历史保留，历史入口成功重开原讨论。四份配置与凭据文件未变，原 prompt 等设置保留，界面继续使用原英文设置。 |
+| 左侧入口与发送键 | 左侧“新建 Chat”和“继续聊天”正常显示；收起后右下角无悬浮恢复按钮，主会话发送键无遮挡，输入临时草稿后正常启用。本次未点击发送。 |
+| 新建与继续聊天 | “新建 Chat”打开空白网页聊天。从历史重开原讨论后，连续两次收起并点击“继续聊天”，均恢复同一网页地址、原有消息及未发送的网页草稿，没有新建会话或重复发送。 |
+| 安装阶段数据保护 | 76 个配置、凭据、会话等受保护数据文件和 195 个浏览器用户数据文件与升级前一致。 |
+| 启动后数据核对 | 26 个原会话文件中，25 个逐字节一致，另一个压缩文件的解压内容完全一致；30 个附件文件及四份配置与凭据文件保持一致。 |
+| 收尾 | 清除本次未发送的验收草稿，保留原主会话，收起网页小窗；DSH 保持可用。 |
+
+本次验证官方安装版升级后的数据保留、侧栏入口、发送区域布局及原会话恢复，没有新增模型消息。未重复划词自动发送或主模型 `read_webchat_reference` 调用；对应实测仍保留在此前记录中。这里只公开验收结论，不包含私人会话标题、地址、正文、账号、截图、原始日志或备份数据。
+
+English summary: the existing official macOS arm64 DSH 0.2.1-rc.1 installation was upgraded from plugin 0.3.15 to the published npm version 0.3.17 without changing the client or switching desktops. Sign-in, all eight plugin history entries, and settings were retained. Sidebar New Chat opened a blank discussion; two collapse/Continue chat cycles restored the same discussion and unsent draft without creating or sending again. The main send button remained unobstructed and became enabled with a draft; no message was sent. Installed files matched the release, and original session contents, attachments, configuration, and credentials were preserved. Temporary validation drafts were removed; private evidence and backups are excluded from the repository.
+
 ## 0.3.16：rc.3 核心流程与 npm 迁移验收
 
 2026-10-25。保留四个旧宿主，增加 DSH `0.2.1-rc.3` 的精确声明和开发依赖；修复普通 Web 宿主先显示入口、点击才报错的问题，新增 npm 分发。rc.3 桌面核心流程与真实模型回读已通过；随后用公开 registry 中的 `0.3.16-rc.1` 完成 tgz/Git 迁移验收。正式 `0.3.16` 的 130 个运行文件与该候选包逐字节一致，只调整版本和发布材料。
