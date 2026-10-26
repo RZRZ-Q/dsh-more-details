@@ -236,6 +236,22 @@ describe('DeepSeek 网页更多详情控制器', () => {
     expect(f.port.send).toHaveBeenLastCalledWith(promptText, undefined)
   })
 
+  it('更多详情发送后反复收起和继续，只恢复原会话且不重复发送', async () => {
+    const f = fixture()
+    await f.controller.start(selection)
+    const history = f.controller.getSnapshot().history
+    for (let index = 0; index < 3; index++) {
+      f.controller.hide()
+      f.controller.show()
+      expect(f.controller.getSnapshot()).toMatchObject({ visible: true, currentUrl: firstUrl })
+      expect(f.controller.getSnapshot().history).toBe(history)
+    }
+    expect(f.port.newChat).toHaveBeenCalledOnce()
+    expect(f.port.send).toHaveBeenCalledExactlyOnceWith(promptText, undefined)
+    expect(f.port.open).not.toHaveBeenCalled()
+    expect(f.prepare).toHaveBeenCalledOnce()
+  })
+
   it('网页手动切换再切回也不恢复来源绑定', async () => {
     const f = fixture()
     await f.controller.start(selection)

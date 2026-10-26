@@ -4,12 +4,13 @@
 
 ## Supported environments
 
-Current version: **0.3.16**, declaring **DSH 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, and 0.2.1-rc.3**. Web Chat needs the official Desktop browser guest. In an ordinary browser, the plugin hides New Chat and disables More details with an explanation. Add to chat, API side chat, saved-reference previews, and on-demand snapshot reading remain available; reopening the website inside the plugin is Desktop-only. Windows/Linux full feature acceptance is still unverified.
+Current version: **0.3.17**, declaring **DSH 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, and 0.2.1-rc.3**. Web Chat needs the official Desktop browser guest. In an ordinary browser, the plugin hides New Chat and disables More details with an explanation. Add to chat, API side chat, saved-reference previews, and on-demand snapshot reading remain available; reopening the website inside the plugin is Desktop-only. Windows/Linux full feature acceptance is still unverified.
 
 Validation is recorded by release rather than implied for every update:
 
 | Plugin release | Verified scope |
 | --- | --- |
+| 0.3.17 | 349 tests and isolated macOS rc.3 acceptance passed: sidebar New Chat / Continue chat, an unobstructed main send control, restoration of the same webpage and unsent draft without duplicate sending, reference capture, and history reopening. Installation preserved all 110 protected files. Automatic selection sending, main-model reference-tool reading, and full restart recovery were not rerun. |
 | 0.3.16 | Five-version installation/imports, 345 tests, and isolated rc.3 Desktop automatic sending, reference reading, restart recovery, and follow-up passed. Real npm migration from tgz and Git preserved data; removing the old archive did not block installation. The npm-installed rc.3 Desktop read the saved snapshot before opening the website, then reopened the original discussion without signing in. |
 | 0.3.14 | Compatibility declarations and development dependencies updated for DSH 0.2.1-rc.2 while retaining both older versions. All three dependency environments passed typechecking and 340 tests, with clean-profile installation and imports. The independent 0.2.1-rc.2 Desktop passed automatic sending, reference reading, and full restart/history/follow-up recovery. Older hosts passed final-package cold startup, historical-reference reading, and signed-in reopening; their complete workflows were not repeated. |
 | 0.3.13 | 340 tests against each supported DSH version; native-market Git installation, Host loading, and process-restart checks in a fresh isolated alpha.4 profile. This distribution update adds the publisher-maintained index, complete CSS assets, and non-JIT Zod Mini validation without changing saved data or the wire contract. It did not repeat Desktop interaction or model-send acceptance. |
@@ -22,15 +23,15 @@ See [version compatibility](open-source/compatibility.md), [validation records](
 
 ### npm (recommended)
 
-In **Plugins → Add plugin**, enter `dsh-more-details@0.3.16`. DSH installs the precompiled package from npm and checks host compatibility. Use the same profile when upgrading; changing the package source does not require removing plugin data.
+In **Plugins → Add plugin**, enter `dsh-more-details@0.3.17`. DSH installs the precompiled package from npm and checks host compatibility. Use the same profile when upgrading; changing the package source does not require removing plugin data.
 
 For the Desktop CLI, use the **CLI bundled with your Desktop installation**. Fully quit the test/target DSH instance before a CLI installation, then reopen it. This macOS example assumes `~/Applications`; adjust the executable path for your installation:
 
 ```sh
-"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.16
+"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.17
 ```
 
-For browser-hosted DSH, use its own CLI and profile, for example `dsh plugin --profile web add dsh-more-details@0.3.16`. Do not use a separately installed CLI to manage the Desktop profile, or run bare `pnpm add` in an arbitrary directory. Future upgrades use the same command with the desired compatible version. If a registry mirror has not synchronized a newly released version, add `--registry=https://registry.npmjs.org` to that installation command; this does not change global registry settings.
+For browser-hosted DSH, use its own CLI and profile, for example `dsh plugin --profile web add dsh-more-details@0.3.17`. Do not use a separately installed CLI to manage the Desktop profile, or run bare `pnpm add` in an arbitrary directory. Future upgrades use the same command with the desired compatible version. If a registry mirror has not synchronized a newly released version, add `--registry=https://registry.npmjs.org` to that installation command; this does not change global registry settings.
 
 ### Discover
 
@@ -45,14 +46,14 @@ New versions use an exact npm version; older entries retain their pinned Git com
 ### Git and release archives
 
 - **Git:** use the full public commit associated with the desired release: `git+https://github.com/RZRZ-Q/dsh-more-details.git#<full-commit>`. Enter it in **Add plugin** or pass it to the bundled `dsh plugin --profile desktop add` command. Built runtime files are committed.
-- **Archive:** download `dsh-more-details-0.3.16.tgz` from the [release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.16) and install via **Add plugin**. The source archive and `SHA256SUMS` are provided separately.
+- **Archive:** download `dsh-more-details-0.3.17.tgz` from the [release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.17) and install via **Add plugin**. The source archive and `SHA256SUMS` are provided separately.
 
 A local archive can remain a `file:` dependency of the profile. Keep the archive at its recorded path while that dependency exists; moving or deleting it can block other package operations in the same profile. Prefer npm for installations that should not depend on local archive storage.
 
 ### Migrate an existing tgz or Git installation
 
 1. Back up the target profile and fully quit that DSH instance before CLI changes. Keep the same profile, plugin name, credentials, attachments, and browser data.
-2. Install `dsh-more-details@0.3.16` through the matching DSH installer/CLI. This replaces the package source; do not uninstall the plugin and delete its data first.
+2. Install `dsh-more-details@0.3.17` through the matching DSH installer/CLI. This replaces the package source; do not uninstall the plugin and delete its data first.
 3. Reopen DSH and check the version, custom prompt, history, existing references, and remembered website sign-in. Website sessions can expire independently.
 4. Remove the old archive only after the profile's dependency for this plugin no longer points to it and another plugin/package operation succeeds.
 
@@ -66,6 +67,7 @@ After installation, disable a duplicate AHGGG plugin and fully quit/reopen DSH s
 2. Select text in a completed main-conversation message, click **More details**, and wait for the web reply.
 3. Edit the instruction through **Prompt** in the panel or **Settings → General settings → More details**. The bundled default prompt is in Chinese, meaning “Tell me more about this.” You can save your own instruction or restore the default. Upgrades preserve saved custom values; switching the interface language does not translate prompt text.
 4. Use **New** for a blank web chat or **History** to reopen a discussion. Reopening history does not resend the previous question.
+5. Collapse the panel to return to the main composer. **Continue chat** appears in the left sidebar and restores the same webpage without creating a chat or sending a message. **New Chat** remains a separate action. The collapsed panel no longer leaves a button over the bottom-right send control; a compact sidebar shows the actions as icons with tooltips.
 
 Further selections from the same DSH conversation can continue its active web discussion. Switching the source conversation, starting a blank chat, or manually reopening history makes the next **More details** request start a separate discussion.
 

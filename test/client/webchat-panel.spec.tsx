@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest'
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { ConfigFormSnapshot } from '@deepseek-ai/dsh-client-ui-settings/client'
-import { WebChatPanel, WebChatLauncher, type WebChatPanelProps, type WebChatPreferences } from '../../src/client/webchat/WebChatPanel.js'
+import { WebChatPanel, WebChatLauncher, WebChatRestore, type WebChatPanelProps, type WebChatPreferences } from '../../src/client/webchat/WebChatPanel.js'
 import type { WebChatState } from '../../src/client/webchat/controller.js'
 import { DEFAULT_WEBCHAT_LAYOUT, type WebChatLayout } from '../../src/shared/webchat-layout.js'
 import { localeFixture } from '../fixtures/locale.js'
@@ -13,7 +13,7 @@ afterEach(() => { cleanup(); vi.restoreAllMocks() })
 type Snapshot = Omit<ConfigFormSnapshot<WebChatPreferences>, 'mode'>
   & { readonly mode?: 'host' | 'memory' }
 
-function fixture(initial: Partial<Snapshot> = {}, version: 'rc.2' | 'alpha.4' = 'rc.2', initialState: Partial<WebChatState> = {}) {
+function fixture(initial: Partial<Snapshot> = {}, version: 'rc.2' | 'alpha.4' = 'rc.2', initialState: Partial<WebChatState> = {}, wide = true) {
   let state: WebChatState = { visible: true, hasOpened: true, busy: false, history: [], ...initialState }
   const listeners = new Set<() => void>()
   const visible = (value: boolean): void => {
@@ -23,7 +23,7 @@ function fixture(initial: Partial<Snapshot> = {}, version: 'rc.2' | 'alpha.4' = 
   const controller = {
     getSnapshot: () => state,
     subscribe: (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener) } },
-    hide: () => visible(false), show: () => visible(true), newChat: vi.fn(), resume: vi.fn(), cancelPending: vi.fn(),
+    hide: () => visible(false), show: vi.fn(() => visible(true)), newChat: vi.fn(), resume: vi.fn(), cancelPending: vi.fn(),
   } as unknown as WebChatPanelProps['controller']
   const webpage = document.createElement('webview')
   const attach = vi.fn((container: HTMLElement) => { container.append(webpage) })
@@ -48,7 +48,13 @@ function fixture(initial: Partial<Snapshot> = {}, version: 'rc.2' | 'alpha.4' = 
   } as unknown as WebChatPanelProps['form']
   const { locale, setLanguage } = localeFixture('zh')
   const mount = () => {
-    const result = render(<WebChatPanel controller={controller} guest={guest} form={form} locale={locale} />)
+    const result = render(<>
+      <aside aria-label="Chat sidebar">
+        <WebChatLauncher controller={controller} locale={locale} wide={wide} />
+        <WebChatRestore controller={controller} locale={locale} wide={wide} />
+      </aside>
+      <WebChatPanel controller={controller} guest={guest} form={form} locale={locale} />
+    </>)
     const panel = screen.getByRole('complementary', { name: 'DeepSeek Chat' })
     vi.spyOn(panel, 'getBoundingClientRect').mockImplementation(() => ({
       width: Number.parseFloat(panel.style.width), height: Number.parseFloat(panel.style.height),
@@ -81,7 +87,7 @@ describe('网页小窗调整大小', () => {
     expect(panel).toHaveStyle({ width: '596px', height: '670px' })
     fireEvent.click(screen.getByRole('button', { name: '收起 DeepSeek Chat' }))
     expect(panel).not.toBeVisible()
-    fireEvent.click(screen.getByRole('button', { name: '展开 DeepSeek Chat' }))
+    fireEvent.click(screen.getByRole('button', { name: '继续聊天' }))
     expect(panel).toBeVisible()
     expect(panel).toHaveStyle({ width: '596px', height: '670px' })
     expect(attach).toHaveBeenCalledOnce()
@@ -216,6 +222,55 @@ describe('网页小窗调整大小', () => {
     await waitFor(() => { expect(screen.getByRole('alert')).toHaveTextContent('窗口大小未保存：配置可能已变化') })
     fireEvent.keyDown(handle, { key: 'ArrowLeft' })
     await waitFor(() => { expect(screen.queryByRole('alert')).not.toBeInTheDocument(); expect(screen.queryByText('正在保存窗口大小…')).not.toBeInTheDocument() })
+  })
+})
+
+describe('侧栏继续网页聊天', () => {
+  it.each([true, false])('宽侧栏=%s：从历史或设置收起后恢复同一网页，不新建或继续待发送请求', wide => {
+    const url = 'https://chat.deepseek.com/a/chat/s/test-conversation'
+    const f = fixture({}, 'rc.2', { currentUrl: url, pending: {
+      kind: 'prompt', prompt: '尚未确认的请求', sourceSessionId: 'parent', reason: 'unconfirmed',
+    } }, wide)
+    const draft = document.createElement('textarea')
+    draft.value = '尚未发送的网页草稿'
+    f.webpage.append(draft)
+    const sidebar = screen.getByRole('complementary', { name: 'Chat sidebar' })
+    for (const view of ['历史', '提示词']) {
+      fireEvent.click(screen.getByRole('button', { name: view }))
+      expect(f.webpage).not.toBeVisible()
+      fireEvent.click(screen.getByRole('button', { name: '收起 DeepSeek Chat' }))
+      const restore = within(sidebar).getByRole('button', { name: '继续聊天' })
+      expect(within(sidebar).getByRole('button', { name: '新建 Chat' })).toBeInTheDocument()
+      expect(document.querySelector('.dsh-webchat-restore')).toBeNull()
+      fireEvent.click(restore)
+      expect(f.webpage).toBeVisible()
+      expect(f.panel.querySelector('webview')).toBe(f.webpage)
+      expect(draft.value).toBe('尚未发送的网页草稿')
+      expect(f.controller.getSnapshot().currentUrl).toBe(url)
+      expect(f.controller.getSnapshot().pending?.reason).toBe('unconfirmed')
+      expect(within(sidebar).queryByRole('button', { name: '继续聊天' })).toBeNull()
+    }
+    expect(f.controller.show).toHaveBeenCalledTimes(2)
+    expect(f.controller.newChat).not.toHaveBeenCalled()
+    expect(f.controller.resume).not.toHaveBeenCalled()
+    expect(f.attach).toHaveBeenCalledOnce()
+  })
+
+  it('未打开过网页时不显示继续入口，收起后的入口跟随语言', () => {
+    const f = fixture({}, 'rc.2', { hasOpened: false })
+    fireEvent.click(screen.getByRole('button', { name: '收起 DeepSeek Chat' }))
+    expect(screen.queryByRole('button', { name: '继续聊天' })).toBeNull()
+    expect(f.controller.show).not.toHaveBeenCalled()
+    expect(f.controller.newChat).not.toHaveBeenCalled()
+    f.unmount()
+    const opened = fixture()
+    fireEvent.click(screen.getByRole('button', { name: '收起 DeepSeek Chat' }))
+    expect(screen.getByRole('button', { name: '继续聊天' })).toHaveAttribute('title', '继续当前 DeepSeek 网页聊天')
+    act(() => opened.setLanguage('en'))
+    expect(screen.getByRole('button', { name: 'Continue chat' })).toHaveAttribute('title', 'Continue the current DeepSeek web chat')
+    expect(screen.getByRole('button', { name: 'New Chat' })).toBeInTheDocument()
+    expect(opened.controller.show).not.toHaveBeenCalled()
+    expect(opened.controller.newChat).not.toHaveBeenCalled()
   })
 })
 

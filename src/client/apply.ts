@@ -13,7 +13,7 @@ import { createWebChatReferenceSource } from './parent-composer/webchat-referenc
 import webChatReferenceCss from './parent-composer/webchat-reference.css'
 import { WebChatController } from './webchat/controller.js'
 import { DeepSeekGuest, webChatBrowserBridge } from './webchat/guest.js'
-import { WebChatPanel, WebChatLauncher, type WebChatPreferences } from './webchat/WebChatPanel.js'
+import { WebChatPanel, WebChatLauncher, WebChatRestore, type WebChatPreferences } from './webchat/WebChatPanel.js'
 import webChatCss from './webchat/webchat.css'
 import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
 import { mountMoreDetailsSettings } from './dsh/MoreDetailsSettings.js'
@@ -77,6 +77,9 @@ export async function apply(ctx: Context): Promise<void> {
       cleanups.push(clientCtx.slots.inject('sidebar.footer.action', () => clientCtx.slots.register({
         name: 'sidebar.footer.action', id: 'dsh-more-details-new-chat', order: 10,
       }, ({ wide }) => createElement(WebChatLauncher, { controller: details, locale: ctx.locale, wide }))))
+      cleanups.push(clientCtx.slots.inject('sidebar.footer.action', () => clientCtx.slots.register({
+        name: 'sidebar.footer.action', id: 'dsh-more-details-continue-chat', order: 11,
+      }, ({ wide }) => createElement(WebChatRestore, { controller: details, locale: ctx.locale, wide }))))
     }
     const controller = new SideChatController(mounted.remote, sessions)
     cleanups.push(() => controller.dispose())

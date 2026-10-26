@@ -1,5 +1,11 @@
 # DSH 版本兼容
 
+## 0.3.17：收起入口移至侧栏
+
+兼容范围保持 `0.2.0-rc.2 || 0.2.1-alpha.4 || 0.2.1-rc.1 || 0.2.1-rc.2 || 0.2.1-rc.3`。本版通过既有 `sidebar.footer.action` 插槽提供“继续聊天”，保留独立“新建 Chat”，移除右下角悬浮恢复按钮；Host、RPC 与保存数据格式未改。
+
+2026-10-26，独立 macOS arm64 官方 rc.3 payload / Direct 测试壳通过升级、发送键无遮挡、同一网页和草稿恢复、不重复发送及历史重开。工程检查通过 32 文件 / 349 项测试和 23 项身份校验测试。其他宿主及完整重启、划词自动发送、模型引用回读沿用此前分版本记录，没有计作本轮重新验收；详见[验收范围](validation.md)。
+
 ## 0.3.16：rc.3 兼容与 npm 分发
 
 This release adds exact `0.2.1-rc.3` metadata while retaining all four earlier hosts. Package/import checks pass for all five versions; the official rc.3 installer and real Host reference reads pass without an exemption. The isolated rc.3 Desktop passed automatic sending, real model snapshot reading, full restart recovery, and follow-up. Real tgz/Git-to-registry migration passed with 0.3.16-rc.1; the final runtime is byte-identical. The npm-installed rc.3 Desktop also passed cold-start model reading before opening the website and signed-in history reopening. See [current validation](validation.md).

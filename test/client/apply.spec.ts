@@ -45,6 +45,7 @@ describe('Web / Desktop client entry registration', () => {
     }
     await apply(context as unknown as Context)
     expect(slots.has('dsh-more-details-new-chat')).toBe(desktop)
+    expect(slots.has('dsh-more-details-continue-chat')).toBe(desktop)
     expect(slots.has('dsh-more-details-webchat')).toBe(desktop)
     expect(slots.get('dsh-more-details')?.props.webChatAvailable).toBe(desktop)
     expect(sources.size).toBe(3)

@@ -73,8 +73,8 @@ export function WebChatPanel({ controller, guest, form, locale }: WebChatPanelPr
   const guestLabel = text('DeepSeek 网页聊天', 'DeepSeek web chat')
   useEffect(() => { guest.setAccessibleLabel(guestLabel) }, [guest, guestLabel])
   useEffect(() => {
-    if (state.busy) setView('chat')
-  }, [state.busy])
+    if (state.busy || state.visible) setView('chat')
+  }, [state.busy, state.visible])
   useEffect(() => () => {
     removeDragEndListeners.current?.()
     drag.current = null
@@ -260,10 +260,6 @@ export function WebChatPanel({ controller, guest, form, locale }: WebChatPanelPr
           </section>
         </div>
       </aside>
-      {state.hasOpened && !state.visible && (
-        <button type="button" className="dsh-webchat-restore" data-side-chat-panel=""
-          onClick={showChat} aria-label={text('展开 DeepSeek Chat', 'Open DeepSeek Chat')}>DeepSeek Chat</button>
-      )}
     </>
   )
 }
@@ -279,5 +275,23 @@ export function WebChatLauncher({ controller, locale, wide }: {
     title={text('新建 DeepSeek 网页聊天', 'New DeepSeek web chat')}
     aria-label={text('新建 Chat', 'New Chat')} onClick={() => { void controller.newChat() }}>
     {wide ? text('＋ 新建 Chat', '＋ New Chat') : '＋'}
+  </button>
+}
+
+/** 恢复入口随侧栏正常排版；只重新显示已挂载的网页，不导航或重发。 */
+export function WebChatRestore({ controller, locale, wide }: {
+  readonly controller: Pick<WebChatController, 'getSnapshot' | 'subscribe' | 'show'>
+  readonly locale: DshLocale
+  readonly wide: boolean
+}) {
+  const { text } = useDshLocale(locale)
+  const state = useSyncExternalStore(controller.subscribe, controller.getSnapshot, controller.getSnapshot)
+  if (!state.hasOpened || state.visible) return null
+  return <button type="button" className="dsh-webchat-launcher"
+    title={text('继续当前 DeepSeek 网页聊天', 'Continue the current DeepSeek web chat')}
+    aria-label={text('继续聊天', 'Continue chat')} onClick={() => { controller.show() }}>
+    {wide ? text('继续聊天', 'Continue chat') : <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M13.5 7.5a5.5 5.5 0 0 1-5.5 5.5H3l-1.5 1V7.5A5.5 5.5 0 0 1 7 2h1a5.5 5.5 0 0 1 5.5 5.5Z" fill="none" stroke="currentColor" strokeWidth="1.25" />
+    </svg>}
   </button>
 }

@@ -28,7 +28,7 @@ Click **Add to DSH** to attach a reference to your main draft. Send it with a qu
 ## Features
 
 - **Explore a selection.** More details automatically sends the selected text and source context to the real DeepSeek website. Customize the instruction in **Prompt**.
-- **Start or continue a chat.** Open a blank chat with **New Chat**, or use **History** to reopen a discussion and follow up.
+- **Start or continue a chat.** Use sidebar **New Chat** for a blank discussion and **Continue chat** to restore the collapsed panel without resending. Use **History** to reopen earlier discussions.
 - **Bring the discussion back.** **Add to DSH** places a reference card in your current main draft. Preview it, send it with your question, or click it to reopen the web chat.
 - **Read saved text on demand.** The main model can retrieve the captured discussion through `read_webchat_reference`, including after a restart.
 - **Keep your setup.** Restore a valid web login, website language, and panel size. Drag to resize, expand, or collapse; plugin controls follow DSH’s English or Chinese setting.
@@ -38,7 +38,7 @@ Click **Add to DSH** to attach a reference to your main draft. Send it with a qu
 
 Supported versions: **DSH Desktop 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, and 0.2.1-rc.3**. Installation checks and historical Desktop acceptance are separate; see the [version-specific results](docs/open-source/validation.md). Windows and Linux have not completed maintainer feature acceptance. **Web Chat requires Desktop.** In browser-hosted DSH, New Chat is hidden and More details explains why it is disabled; Add to chat, API side chat, and saved-reference preview/reading remain available.
 
-1. In **Plugins → Add plugin**, install **`dsh-more-details@0.3.16`** from npm, or use [Discover](docs/guide.md#discover). [Git and release archives](docs/guide.md#git-and-release-archives) remain available. Disable the original AHGGG plugin if installed to avoid duplicate selection menus.
+1. In **Plugins → Add plugin**, install **`dsh-more-details@0.3.17`** from npm, or use [Discover](docs/guide.md#discover). [Git and release archives](docs/guide.md#git-and-release-archives) remain available. Disable the original AHGGG plugin if installed to avoid duplicate selection menus.
 2. Fully quit and reopen DSH. Click **New Chat** and sign in inside the panel. This website login is separate from your DSH model configuration.
 3. Select text in a completed message and click **More details**. Use **Prompt** to save your preferred instruction; the bundled default is in Chinese.
 4. Continue in the panel, reopen a discussion from **History**, or choose **New** for a fresh chat.

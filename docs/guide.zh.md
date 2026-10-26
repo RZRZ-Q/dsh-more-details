@@ -4,12 +4,13 @@
 
 ## 支持环境
 
-当前版本 **0.3.16**，支持 **DSH 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3**。网页讨论需要官方 Desktop browser guest。普通浏览器中隐藏「新建 Chat」，「更多详情」置灰并说明原因；添加到聊天、API 侧聊、已有引用预览和按需读取仍保留，插件内重开官网仅 Desktop 可用。Windows/Linux 全功能尚未完成验收。
+当前版本 **0.3.17**，支持 **DSH 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3**。网页讨论需要官方 Desktop browser guest。普通浏览器中隐藏「新建 Chat」，「更多详情」置灰并说明原因；添加到聊天、API 侧聊、已有引用预览和按需读取仍保留，插件内重开官网仅 Desktop 可用。Windows/Linux 全功能尚未完成验收。
 
 各版本的验证范围分别记录，不将旧版验收结果视为每次更新都重新执行：
 
 | 插件版本 | 已验证范围 |
 | --- | --- |
+| 0.3.17 | 349 项回归及独立 macOS rc.3 实机验收通过：侧栏新建 / 继续聊天、主发送键无遮挡、恢复同一网页和未发送草稿且不重复发送、引用采集与历史重开。安装阶段 110 个受保护文件全部保留。本轮未重跑划词自动发送、主模型引用工具读取或完整重启恢复。 |
 | 0.3.16 | 五版安装导入、345 项回归及独立 rc.3 桌面的自动发送、引用回读、重启恢复和续聊通过。真实 tgz/Git → npm 迁移保留数据，移走旧归档后安装操作仍成功；npm 安装后的 rc.3 冷启动先实际读取本地快照，再免登录重开原讨论。 |
 | 0.3.14 | 更新 DSH 0.2.1-rc.2 的兼容声明和开发依赖，同时保留两版旧宿主支持。三套依赖均通过 typecheck 和 340 项测试，三版全新 profile 的安装与入口导入通过。独立新版 Desktop 通过自动发送、引用回读、完整重启及历史续聊；旧版本轮补验最终包冷启动、旧引用回读与免登录重开，未重复全部流程。 |
 | 0.3.13 | 在两套支持的 DSH 依赖下各通过 340 项测试，并在全新隔离的 alpha.4 profile 通过原生市场 Git 安装、Host 加载和进程冷重开检查。本次分发更新新增作者索引、补齐 CSS 资产并改用非 JIT 的 Zod Mini 校验，不修改保存数据或传输契约；未重跑桌面交互和模型发送验收。 |
@@ -22,15 +23,15 @@
 
 ### npm（推荐）
 
-在 **插件 → 添加插件** 中输入 `dsh-more-details@0.3.16`。DSH 从 npm 安装预编译包并检查宿主兼容性。升级时继续使用原 profile，更换包来源不需要删除插件数据。
+在 **插件 → 添加插件** 中输入 `dsh-more-details@0.3.17`。DSH 从 npm 安装预编译包并检查宿主兼容性。升级时继续使用原 profile，更换包来源不需要删除插件数据。
 
 Desktop CLI 必须使用**对应桌面安装自带的 CLI**。通过 CLI 安装前完整退出目标 DSH 实例，安装后重开。下面的 macOS 示例假设应用位于 `~/Applications`，请按实际安装位置调整：
 
 ```sh
-"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.16
+"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.17
 ```
 
-浏览器宿主使用自己的 CLI 和 profile，例如 `dsh plugin --profile web add dsh-more-details@0.3.16`。不要使用另外安装的 CLI 管理 Desktop profile，也不要在任意目录直接执行 `pnpm add`。后续升级沿用同一命令，将版本号替换为需要的兼容版本。如果镜像尚未同步新发布版本，可在该次安装命令后加 `--registry=https://registry.npmjs.org`，无需修改全局 registry。
+浏览器宿主使用自己的 CLI 和 profile，例如 `dsh plugin --profile web add dsh-more-details@0.3.17`。不要使用另外安装的 CLI 管理 Desktop profile，也不要在任意目录直接执行 `pnpm add`。后续升级沿用同一命令，将版本号替换为需要的兼容版本。如果镜像尚未同步新发布版本，可在该次安装命令后加 `--registry=https://registry.npmjs.org`，无需修改全局 registry。
 
 ### 发现市场
 
@@ -45,14 +46,14 @@ DSH 0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3 支持作者维护的
 ### Git 与 Release 安装包
 
 - **Git**：使用目标 Release 对应的完整公开 commit：`git+https://github.com/RZRZ-Q/dsh-more-details.git#<full-commit>`。在「添加插件」中输入，或交给自带的 `dsh plugin --profile desktop add` 命令。仓库已提交构建运行产物。
-- **归档**：从[发布页](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.16)下载 `dsh-more-details-0.3.16.tgz`，通过「添加插件」安装；源码包和 `SHA256SUMS` 单独提供。
+- **归档**：从[发布页](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.17)下载 `dsh-more-details-0.3.17.tgz`，通过「添加插件」安装；源码包和 `SHA256SUMS` 单独提供。
 
 本地归档可能作为 profile 的 `file:` 依赖保留。只要依赖仍指向该文件，就应保留它及其记录路径；移动或删除可能阻塞同一 profile 的其他包操作。希望摆脱本地归档依赖的安装优先使用 npm。
 
 ### 从已有 tgz 或 Git 安装迁移
 
 1. 备份目标 profile；执行 CLI 更改前完整退出该 DSH 实例。保持同一 profile、插件名称、凭据、附件和浏览器数据。
-2. 通过对应 DSH 安装器/CLI 安装 `dsh-more-details@0.3.16`，替换包来源；不需要先卸载插件并删除其数据。
+2. 通过对应 DSH 安装器/CLI 安装 `dsh-more-details@0.3.17`，替换包来源；不需要先卸载插件并删除其数据。
 3. 重开 DSH，检查版本、自定义 prompt、历史、原引用及已记住的网页登录。官网会话本身仍可能独立到期。
 4. 确认该插件的 profile 依赖不再指向旧归档，且另一项插件/包操作成功后，再删除旧归档。
 
@@ -66,6 +67,7 @@ DSH 0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3 支持作者维护的
 2. 在主会话一条已完成的消息中划词，点击 **更多详情**，等待网页回复。
 3. 在小窗顶部 **提示词** 或 **设置 → 通用设置 → 更多详情** 修改指令。默认 prompt 为“告诉我更多相关信息”，可保存自定义内容或恢复默认；升级保留已保存的自定义值，切换界面语言不会翻译 prompt 文字。
 4. 用顶部 **新建** 打开空白网页聊天，用 **历史** 重开讨论。重开历史不会再次发送旧问题。
+5. 收起小窗后回到主输入框，左侧栏会显示 **继续聊天**，点击恢复同一网页，不新建、不发送消息。**新建 Chat** 保持独立操作。收起后不再在右下角留下遮挡发送键的按钮；侧栏折叠时，这两个入口显示为带提示文字的图标。
 
 同一 DSH 主会话中的后续划词可接续当前活动网页讨论；切换来源会话、新建空白聊天或手动重开历史后，下次 **更多详情** 另建讨论。
 

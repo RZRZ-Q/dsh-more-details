@@ -23,4 +23,10 @@ export declare function WebChatLauncher({ controller, locale, wide }: {
     readonly locale: DshLocale;
     readonly wide: boolean;
 }): import("react/jsx-runtime").JSX.Element;
+/** 恢复入口随侧栏正常排版；只重新显示已挂载的网页，不导航或重发。 */
+export declare function WebChatRestore({ controller, locale, wide }: {
+    readonly controller: Pick<WebChatController, 'getSnapshot' | 'subscribe' | 'show'>;
+    readonly locale: DshLocale;
+    readonly wide: boolean;
+}): import("react/jsx-runtime").JSX.Element | null;
 export {};

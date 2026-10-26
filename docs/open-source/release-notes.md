@@ -1,5 +1,47 @@
 # Release notes / 发布说明
 
+## v0.3.17 · Keep the send button clear
+
+The collapsed Web Chat button could cover DSH's main send control. It now lives in the **left sidebar** as **Continue chat**, alongside the separate **New Chat** action. Continue chat restores the existing webpage and unsent draft without creating a conversation or sending again. The expanded panel keeps its bottom-right position.
+
+Install or upgrade with **`dsh-more-details@0.3.17`** in **Plugins → Add plugin**, or use the CLI bundled with your DSH Desktop:
+
+```sh
+dsh plugin --profile desktop add dsh-more-details@0.3.17 --registry=https://registry.npmjs.org
+```
+
+Keep your existing profile and data; fully quit DSH before CLI installation and reopen afterward. This is a complete plugin package. Supported DSH versions remain **0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, and 0.2.1-rc.3**. Host services, RPC, and saved-data formats are unchanged.
+
+### Validation
+
+- **349 tests in 32 files**, **23 identity-guard tests**, peer, type, lint, build, and package checks passed.
+- Isolated macOS arm64 DSH 0.2.1-rc.3 upgraded from 0.3.16 with all **110 protected files unchanged**; all **147 installed package files** matched the tested archive.
+- Manual collapse, Add to DSH, collapse from History, and a half-width window restored the same URL, original question/reply pair, and unsent web draft without duplicate sends. New Chat and history reopening also passed.
+- The main send control remained clear in normal and half-width windows. Clicking it sent a multiline draft with a web reference and received the expected reply.
+
+Bilingual labels and compact sidebar icons are covered by automated tests; real UI acceptance used Chinese. Selection-triggered automatic sending, main-model `read_webchat_reference`, and full restart recovery were not rerun for this patch. Existing DSH installations and desktop spaces were untouched. See [validation](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.17/docs/open-source/validation.md) for scope and prior results.
+
+### Assets
+
+- `dsh-more-details-0.3.17.tgz` — complete installable plugin.
+- `dsh-more-details-0.3.17-source.tar.gz` — public source and built runtime.
+- `SHA256SUMS` — archive checksums.
+
+<details>
+<summary>简体中文</summary>
+
+### v0.3.17 · 避免 Chat 按钮遮挡发送键
+
+收起后的 Chat 悬浮按钮可能挡住 DSH 主输入框的发送键。本版将恢复入口移到**左侧栏“继续聊天”**，并保留独立的**“新建 Chat”**。继续聊天恢复原网页和未发送草稿，不新建、不重复发送；展开后仍是右下角小窗。
+
+通过 **插件 → 添加插件** 安装 **`dsh-more-details@0.3.17`**，或使用上方 CLI 命令。沿用现有 profile 和数据，CLI 安装前完整退出，安装后重开。分发的是完整插件包，五版 DSH 兼容范围、Host、RPC 和保存数据格式不变。
+
+工程检查通过 **32 文件 / 349 项测试**及 **23 项身份校验测试**。独立 macOS arm64 DSH rc.3 从 0.3.16 升级后，110 个受保护文件全部一致，147 个已安装包文件与验收包逐字节一致。手动收起、添加到 DSH 自动收起、历史页收起和半宽窗口均能恢复同一网页、原一问一答及未发送草稿，没有重复发送。常规与半宽窗口发送区域无遮挡；实际发送带引用的多行主草稿并收到预期回复。
+
+中英文案和紧凑侧栏图标由自动回归覆盖，实机为中文。本轮未重跑划词自动发送、主模型引用工具读取和完整重启恢复，既往结果仍分版本保留。未操作日常 DSH 或切换桌面。附件提供安装包、公开源码包和校验值，不含私人会话、凭据或备份。
+
+</details>
+
 ## v0.3.16 · npm distribution, Web host controls, and DSH rc.3
 
 Install or upgrade through **Plugins → Add plugin** with **`dsh-more-details@0.3.16`**, or use the matching DSH CLI:

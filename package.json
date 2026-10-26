@@ -1,6 +1,6 @@
 {
   "name": "dsh-more-details",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "description": "Select text for an independent DeepSeek web discussion, then bring it back to DSH with reference cards and on-demand text snapshots.",
   "keywords": [
     "deepseek-harness",

@@ -1,5 +1,24 @@
 # 验收范围与自行测试
 
+## 0.3.17：侧栏恢复入口与发送区域验收
+
+2026-10-26，在 macOS arm64 独立环境中，将插件从 0.3.16 升级到 0.3.17。使用官方 DSH `0.2.1-rc.3` payload 与既有 Direct 测试壳；应用、profile 和浏览器数据均与日常 DSH 隔离，未操作当前 DSH 或切换桌面。本版将收起后的恢复按钮移入左侧栏，保留独立的“新建 Chat”和“继续聊天”。
+
+| 检查 | 本轮结果 |
+| --- | --- |
+| 工程检查 | `npm run check` 通过：32 文件 / 349 项测试、23 项身份校验测试，以及 peer、typecheck、lint、构建和包结构检查。 |
+| 安装与数据保留 | 0.3.16 → 0.3.17 安装成功；安装后的 147 个分发文件与验收包逐字节一致，110 个安装前受保护文件全部保持一致。 |
+| 新建与网页回复 | 左侧“新建 Chat”打开空白官网聊天；发送一次测试请求并收到回复。新建操作保留未发送草稿的保护逻辑；清空测试草稿后可打开空白聊天。 |
+| 手动收起与继续 | 在网页输入框保留未发送草稿后，收起并点击左侧“继续聊天”：恢复同一 URL、原一问一答及网页草稿，没有新建会话或重复发送。 |
+| 添加到 DSH 后恢复 | 捕获两条网页消息并添加引用，小窗自动收起；“继续聊天”恢复同一 URL、原一问一答及网页草稿。 |
+| 历史页与窄窗口 | 从历史页收起后继续会返回当前网页；半宽窗口下收起与继续同样保留 URL、原一问一答和未发送草稿。另行新建空白聊天后，从历史重开原 URL，仍只有原一问一答。 |
+| 主会话发送键 | 常规与半宽窗口的发送区域均无悬浮恢复按钮；主会话保留多行、带引用的草稿，侧栏收起时实际点击发送并收到预期回复。 |
+| 语言与侧栏图标 | 自动回归覆盖中英标签和紧凑侧栏图标。实机使用中文；该测试壳折叠侧栏时整栏隐藏，因此不将图标覆盖写作实机验收。 |
+
+本轮只改插件客户端入口及发布材料，Host、RPC 和保存数据格式不变，五版兼容范围保持不变。本轮未重跑划词自动发送、主模型 `read_webchat_reference` 或完整重启恢复；这些流程的既往结果仍列在对应版本下。Windows/Linux 未增加实机验收。原始截图、网页地址、聊天正文及数据核对记录仅保留在本地忽略目录。
+
+English summary: on an isolated macOS arm64 DSH 0.2.1-rc.3 Desktop, installation preserved all 110 protected files, and all 147 installed package files matched the tested archive. Sidebar New Chat opened a blank discussion and received a real reply. Manual collapse, Add to DSH, collapse from History, and a half-width window all restored the same URL, one question/reply pair, and unsent website draft without creating or sending again. The main send control remained unobstructed; clicking it sent a multiline draft with a reference and received the expected reply. Engineering checks passed 349 tests and 23 identity tests. Automatic selection sending, main-model reference-tool reading, and full restart recovery were not rerun in this patch.
+
 ## 0.3.16：rc.3 核心流程与 npm 迁移验收
 
 2026-10-25。保留四个旧宿主，增加 DSH `0.2.1-rc.3` 的精确声明和开发依赖；修复普通 Web 宿主先显示入口、点击才报错的问题，新增 npm 分发。rc.3 桌面核心流程与真实模型回读已通过；随后用公开 registry 中的 `0.3.16-rc.1` 完成 tgz/Git 迁移验收。正式 `0.3.16` 的 130 个运行文件与该候选包逐字节一致，只调整版本和发布材料。
