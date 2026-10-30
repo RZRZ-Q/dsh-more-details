@@ -1,5 +1,35 @@
 # 验收范围与自行测试
 
+## 0.3.18：rc.5 兼容验收
+
+2026-10-30，使用官方 macOS arm64 DSH `0.2.1-rc.5` 的运行 payload 与 Electron 44.7.0 Direct 测试壳，应用标识、profile、agents 和浏览器数据均独立；沿用以前的独立测试数据。测试壳仅负责隔离路径，官方运行文件未修改，不随插件分发。未切换桌面。
+
+| 检查 | 结果 |
+| --- | --- |
+| 工程检查 | rc.5 真实依赖下类型、peer、lint、构建和包检查通过；32 文件 / 349 项回归及 23 项身份检查测试通过。 |
+| 六版安装 | 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1、rc.2、rc.3、rc.5 的隔离安装、依赖树与公开入口导入全部通过；不是六版完整 GUI 验收。 |
+| 官方安装器 | rc.5 自带 CLI 在独立 desktop profile 中直接安装完整 0.3.18 本地包，无兼容豁免。 |
+| 自动发送 | 修改默认 prompt 后，实际划词并点击“更多详情”，新网页讨论自动收到 prompt、选文和来源背景；获得预期回复，未重复发送。 |
+| 引用回读 | “添加到 DSH”保存两条消息快照和引用卡；主模型实际调用 `read_webchat_reference`，展开工具输出确认消息数、正文与验收标记。 |
+| 完整退出重开 | 确认旧进程结束后后台冷启动。引用卡恢复；尚未打开官网时，主模型再次实际读取相同引用 ID、采集时间及两条消息。 |
+| 网页恢复与续聊 | 点击引用卡免登录打开同一讨论；追问收到预期回复。新建空白聊天后，插件历史能重开原讨论，未再次自动发送。 |
+| 设置与侧栏 | 自定义 prompt 跨重启保留，验收后恢复默认；收起后从侧栏“继续聊天”恢复同一讨论。 |
+
+原始测试会话、网页地址、账号、截图和日志仅保留在忽略的临时目录。Windows / Linux 没有实机验收；旧版完整功能结果仍以对应历史记录为准。
+
+English summary: 0.3.18 passed rc.5 engineering checks, six-host isolated installation/imports, and macOS rc.5 Desktop acceptance. A real selection triggered one automatic web send and reply; Add to DSH captured a two-message reference that the main model actually read. After a full process restart, the model read the same saved snapshot before opening the website. Signed-in reopening, follow-up, history reopening, sidebar resume, and prompt persistence passed. The isolated test shell is not shipped; private evidence is excluded.
+
+### 现有官方 rc.5 安装版升级
+
+同日，在已由用户升级到 `0.2.1-rc.5` 的官方 DSH 中，正常退出并备份数据后，使用它自带的 CLI 将插件从 0.3.17 升至完整的 0.3.18 本地包。147 个已安装分发文件与安装包一致；无需新增兼容豁免。未替换或升级客户端，未切换桌面。
+
+- 安装阶段：80 个数据文件、30 个浏览器数据文件和三个客户端关键文件保持一致，仅插件依赖声明和安装锁文件变化。
+- 后台启动后：原有 8 条插件网页历史及自定义 prompt 保留；“New Chat”打开空白网页，历史讨论免登录重开，“Continue chat”恢复同一地址和原消息，没有重复发送。
+- 原有 28 个会话文件、30 个附件文件及四份配置/凭据文件在启动验收后仍逐字节一致。当前 DSH 内没有发送验收消息；模型调用和自动发送只在独立环境进行。
+- 本轮临时测试应用及其 Application Support 别名已清理；私人备份、原始记录和会话数据未进入公开文件。
+
+English summary: the existing official rc.5 app was locally upgraded from plugin 0.3.17 to 0.3.18 using its bundled installer, without a compatibility exemption or client change. All 147 installed files matched the archive. The eight saved web discussions, custom prompt, and sign-in state remained available; New Chat and Continue chat worked without duplicate sending. Original session, attachment, configuration, and credential files remained byte-identical after startup. No test messages were sent in the daily-use app.
+
 ## 0.3.17：侧栏恢复入口与发送区域验收
 
 2026-10-26，在 macOS arm64 独立环境中，将插件从 0.3.16 升级到 0.3.17。使用官方 DSH `0.2.1-rc.3` payload 与既有 Direct 测试壳；应用、profile 和浏览器数据均与日常 DSH 隔离，未操作当前 DSH 或切换桌面。本版将收起后的恢复按钮移入左侧栏，保留独立的“新建 Chat”和“继续聊天”。

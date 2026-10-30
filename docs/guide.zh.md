@@ -4,12 +4,13 @@
 
 ## 支持环境
 
-当前版本 **0.3.17**，支持 **DSH 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3**。网页讨论需要官方 Desktop browser guest。普通浏览器中隐藏「新建 Chat」，「更多详情」置灰并说明原因；添加到聊天、API 侧聊、已有引用预览和按需读取仍保留，插件内重开官网仅 Desktop 可用。Windows/Linux 全功能尚未完成验收。
+当前版本 **0.3.18**，支持 **DSH 0.2.0-rc.2、0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3 和 0.2.1-rc.5**。网页讨论需要官方 Desktop browser guest。普通浏览器中隐藏「新建 Chat」，「更多详情」置灰并说明原因；添加到聊天、API 侧聊、已有引用预览和按需读取仍保留，插件内重开官网仅 Desktop 可用。Windows/Linux 全功能尚未完成验收。
 
 各版本的验证范围分别记录，不将旧版验收结果视为每次更新都重新执行：
 
 | 插件版本 | 已验证范围 |
 | --- | --- |
+| 0.3.18 | 增加 rc.5 精确支持并保留此前五版。六版隔离安装/导入及 349 项测试通过；独立 macOS rc.5 通过自动发送、主模型实际引用回读、完整重启、免登录历史重开和续聊。现有官方 rc.5 升级保留登录态、历史、设置、会话和附件。 |
 | 0.3.17 | 349 项回归及独立 macOS rc.3 实机验收通过：侧栏新建 / 继续聊天、主发送键无遮挡、恢复同一网页和未发送草稿且不重复发送、引用采集与历史重开。安装阶段 110 个受保护文件全部保留。本轮未重跑划词自动发送、主模型引用工具读取或完整重启恢复。 |
 | 0.3.16 | 五版安装导入、345 项回归及独立 rc.3 桌面的自动发送、引用回读、重启恢复和续聊通过。真实 tgz/Git → npm 迁移保留数据，移走旧归档后安装操作仍成功；npm 安装后的 rc.3 冷启动先实际读取本地快照，再免登录重开原讨论。 |
 | 0.3.14 | 更新 DSH 0.2.1-rc.2 的兼容声明和开发依赖，同时保留两版旧宿主支持。三套依赖均通过 typecheck 和 340 项测试，三版全新 profile 的安装与入口导入通过。独立新版 Desktop 通过自动发送、引用回读、完整重启及历史续聊；旧版本轮补验最终包冷启动、旧引用回读与免登录重开，未重复全部流程。 |
@@ -23,19 +24,19 @@
 
 ### npm（推荐）
 
-在 **插件 → 添加插件** 中输入 `dsh-more-details@0.3.17`。DSH 从 npm 安装预编译包并检查宿主兼容性。升级时继续使用原 profile，更换包来源不需要删除插件数据。
+在 **插件 → 添加插件** 中输入 `dsh-more-details@0.3.18`。DSH 从 npm 安装预编译包并检查宿主兼容性。升级时继续使用原 profile，更换包来源不需要删除插件数据。
 
 Desktop CLI 必须使用**对应桌面安装自带的 CLI**。通过 CLI 安装前完整退出目标 DSH 实例，安装后重开。下面的 macOS 示例假设应用位于 `~/Applications`，请按实际安装位置调整：
 
 ```sh
-"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.17
+"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.18
 ```
 
-浏览器宿主使用自己的 CLI 和 profile，例如 `dsh plugin --profile web add dsh-more-details@0.3.17`。不要使用另外安装的 CLI 管理 Desktop profile，也不要在任意目录直接执行 `pnpm add`。后续升级沿用同一命令，将版本号替换为需要的兼容版本。如果镜像尚未同步新发布版本，可在该次安装命令后加 `--registry=https://registry.npmjs.org`，无需修改全局 registry。
+浏览器宿主使用自己的 CLI 和 profile，例如 `dsh plugin --profile web add dsh-more-details@0.3.18`。不要使用另外安装的 CLI 管理 Desktop profile，也不要在任意目录直接执行 `pnpm add`。后续升级沿用同一命令，将版本号替换为需要的兼容版本。如果镜像尚未同步新发布版本，可在该次安装命令后加 `--registry=https://registry.npmjs.org`，无需修改全局 registry。
 
 ### 发现市场
 
-DSH 0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3 支持作者维护的原生市场索引：
+DSH 0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3 和 0.2.1-rc.5 支持作者维护的原生市场索引：
 
 1. 在 **插件 → 实验性插件 → 更多** 中启用 **自定义插件市场**。
 2. 在 **发现 → 添加索引源** 中添加 `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json`。
@@ -46,14 +47,14 @@ DSH 0.2.1-alpha.4、0.2.1-rc.1、0.2.1-rc.2 和 0.2.1-rc.3 支持作者维护的
 ### Git 与 Release 安装包
 
 - **Git**：使用目标 Release 对应的完整公开 commit：`git+https://github.com/RZRZ-Q/dsh-more-details.git#<full-commit>`。在「添加插件」中输入，或交给自带的 `dsh plugin --profile desktop add` 命令。仓库已提交构建运行产物。
-- **归档**：从[发布页](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.17)下载 `dsh-more-details-0.3.17.tgz`，通过「添加插件」安装；源码包和 `SHA256SUMS` 单独提供。
+- **归档**：从[发布页](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.18)下载 `dsh-more-details-0.3.18.tgz`，通过「添加插件」安装；源码包和 `SHA256SUMS` 单独提供。
 
 本地归档可能作为 profile 的 `file:` 依赖保留。只要依赖仍指向该文件，就应保留它及其记录路径；移动或删除可能阻塞同一 profile 的其他包操作。希望摆脱本地归档依赖的安装优先使用 npm。
 
 ### 从已有 tgz 或 Git 安装迁移
 
 1. 备份目标 profile；执行 CLI 更改前完整退出该 DSH 实例。保持同一 profile、插件名称、凭据、附件和浏览器数据。
-2. 通过对应 DSH 安装器/CLI 安装 `dsh-more-details@0.3.17`，替换包来源；不需要先卸载插件并删除其数据。
+2. 通过对应 DSH 安装器/CLI 安装 `dsh-more-details@0.3.18`，替换包来源；不需要先卸载插件并删除其数据。
 3. 重开 DSH，检查版本、自定义 prompt、历史、原引用及已记住的网页登录。官网会话本身仍可能独立到期。
 4. 确认该插件的 profile 依赖不再指向旧归档，且另一项插件/包操作成功后，再删除旧归档。
 
@@ -183,5 +184,5 @@ npm run release:publish -- vX.Y.Z --title "vX.Y.Z" --notes-file docs/open-source
 - [版本兼容说明](open-source/compatibility.md)：受支持 DSH 版本的兼容改动、环境和验收结果。
 - [分发与能力说明](open-source/distribution.md)：打包、市场安装与上架申请状态。
 - [相关项目与功能差异](open-source/comparison.md)：固定源码版本和证据链接。
-- [v0.3.14 中英双语发布说明](open-source/release-notes.md)，既往版本记录保留中文。
+- [中英双语发布说明](open-source/release-notes.md)，既往版本记录保留中文。
 - [上游改造范围](../UPSTREAM.md)、[第三方许可](../THIRD_PARTY_NOTICES.md)和 [MIT 许可](../LICENSE)。

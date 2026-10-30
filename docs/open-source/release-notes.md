@@ -1,5 +1,36 @@
 # Release notes / 发布说明
 
+## v0.3.18 · Support DSH 0.2.1-rc.5
+
+Adds exact **DSH 0.2.1-rc.5** support while retaining **0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, and 0.2.1-rc.3**. This is a complete plugin package; no compatibility exemption is needed. Runtime code, RPC, and saved-data formats are unchanged from 0.3.17.
+
+Install the attached `dsh-more-details-0.3.18.tgz` through **Plugins → Add plugin**, or install `dsh-more-details@0.3.18` from npm once it appears in the registry. When using the CLI, use the one bundled with your DSH Desktop, fully quit DSH first, and keep the same profile and data:
+
+```sh
+dsh plugin --profile desktop add dsh-more-details@0.3.18 --registry=https://registry.npmjs.org
+```
+
+**Verified:** 349 regression tests, 23 identity tests, type/peer/lint/build/package checks, and isolated installation/import checks across all six supported versions. An isolated macOS arm64 rc.5 Desktop passed selection-triggered automatic sending, actual model reference reading, full restart recovery, signed-in history reopening, and follow-up. The existing official rc.5 installation also retained sign-in, history, custom prompt, sessions, and attachments after upgrading.
+
+Older hosts did not repeat full Desktop acceptance in this update. Windows/Linux full feature acceptance remains unverified. See [validation](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.18/docs/open-source/validation.md) for scope.
+
+Assets: the complete plugin `.tgz`, public source archive, and `SHA256SUMS`. Private conversations, credentials, backups, and raw acceptance logs are excluded.
+
+<details>
+<summary>简体中文</summary>
+
+### v0.3.18 · 适配 DSH 0.2.1-rc.5
+
+新增 **rc.5** 支持，保留此前五个版本。分发完整插件包，无需手动豁免；插件运行代码、RPC 和保存数据格式不变。
+
+在「插件 → 添加插件」安装附件 `dsh-more-details-0.3.18.tgz`，或等 npm registry 出现新版后安装 `dsh-more-details@0.3.18`。CLI 安装使用 DSH 自带命令，先完整退出，沿用原 profile 和数据，安装后重开。
+
+已通过 **349 项回归、23 项身份测试和六版隔离安装/导入检查**。独立 macOS rc.5 实测通过划词自动发送、主模型引用回读、完整重启恢复、免登录历史重开和续聊。现有官方 rc.5 升级也保留了登录态、历史、自定义提示词、会话与附件。
+
+旧宿主未重复全套桌面验收，Windows/Linux 全功能仍未实机验收。安装包、公开源码包和校验值随 Release 提供，不含私人会话、凭据、备份或原始验收日志。
+
+</details>
+
 ## v0.3.17 · Keep the send button clear
 
 The collapsed Web Chat button could cover DSH's main send control. It now lives in the **left sidebar** as **Continue chat**, alongside the separate **New Chat** action. Continue chat restores the existing webpage and unsent draft without creating a conversation or sending again. The expanded panel keeps its bottom-right position.

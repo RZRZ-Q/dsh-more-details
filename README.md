@@ -36,9 +36,9 @@ Click **Add to DSH** to attach a reference to your main draft. Send it with a qu
 
 ## Get started
 
-Supported versions: **DSH Desktop 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, and 0.2.1-rc.3**. Installation checks and historical Desktop acceptance are separate; see the [version-specific results](docs/open-source/validation.md). Windows and Linux have not completed maintainer feature acceptance. **Web Chat requires Desktop.** In browser-hosted DSH, New Chat is hidden and More details explains why it is disabled; Add to chat, API side chat, and saved-reference preview/reading remain available.
+Supported versions: **DSH Desktop 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, 0.2.1-rc.3, and 0.2.1-rc.5**. Installation checks and historical Desktop acceptance are separate; see the [version-specific results](docs/open-source/validation.md). Windows and Linux have not completed maintainer feature acceptance. **Web Chat requires Desktop.** In browser-hosted DSH, New Chat is hidden and More details explains why it is disabled; Add to chat, API side chat, and saved-reference preview/reading remain available.
 
-1. In **Plugins → Add plugin**, install **`dsh-more-details@0.3.17`** from npm, or use [Discover](docs/guide.md#discover). [Git and release archives](docs/guide.md#git-and-release-archives) remain available. Disable the original AHGGG plugin if installed to avoid duplicate selection menus.
+1. In **Plugins → Add plugin**, install **`dsh-more-details@0.3.18`** from npm, or use [Discover](docs/guide.md#discover). [Git and release archives](docs/guide.md#git-and-release-archives) remain available. Disable the original AHGGG plugin if installed to avoid duplicate selection menus.
 2. Fully quit and reopen DSH. Click **New Chat** and sign in inside the panel. This website login is separate from your DSH model configuration.
 3. Select text in a completed message and click **More details**. Use **Prompt** to save your preferred instruction; the bundled default is in Chinese.
 4. Continue in the panel, reopen a discussion from **History**, or choose **New** for a fresh chat.

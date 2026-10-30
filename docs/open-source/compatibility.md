@@ -1,5 +1,17 @@
 # DSH 版本兼容
 
+## 0.3.18：DSH 0.2.1-rc.5 兼容
+
+本版增加 `0.2.1-rc.5` 的精确兼容声明，保留 `0.2.0-rc.2`、`0.2.1-alpha.4`、`0.2.1-rc.1`、`0.2.1-rc.2`、`0.2.1-rc.3`；开发依赖同步至 rc.5。未将 rc.4 或未来版本纳入未经验证的范围。分发完整插件包，安装无需本机兼容豁免。
+
+rc.5 的官方发布说明涉及思考内容展示优化。针对实际 rc.5 依赖与 Desktop payload 的检查、安装及桌面验收均通过：插件所用的划词菜单、侧栏插槽、Desktop browser bridge、引用附件和读取工具继续可用，无需修改插件业务代码。`src/`、构建后的 `lib/`、RPC 和保存数据格式相对 0.3.17 不变。
+
+六个版本均通过隔离安装和公开入口导入。rc.5 另通过划词自动发送、实际模型读取引用、完整退出重开、免登录历史重开和网页续聊；旧版没有重复全套桌面验收。详见[验收记录](validation.md)。
+
+English summary: 0.3.18 adds exact DSH 0.2.1-rc.5 support and retains all five earlier hosts. All six pass isolated package installation/import checks; rc.5 also passes automatic web sending, actual model reference reads, full restart recovery, signed-in reopening, and follow-up. Runtime code and saved-data formats are unchanged.
+
+依据：[官方 rc.5 发布说明](https://github.com/deepseek-ai/deepseek-harness/releases/tag/dsh-v0.2.1-rc.5)。
+
 ## 0.3.17：收起入口移至侧栏
 
 兼容范围保持 `0.2.0-rc.2 || 0.2.1-alpha.4 || 0.2.1-rc.1 || 0.2.1-rc.2 || 0.2.1-rc.3`。本版通过既有 `sidebar.footer.action` 插槽提供“继续聊天”，保留独立“新建 Chat”，移除右下角悬浮恢复按钮；Host、RPC 与保存数据格式未改。
