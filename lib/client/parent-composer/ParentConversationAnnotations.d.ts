@@ -24,6 +24,6 @@ export declare function ParentComposerAnnotations({ input, onRemove, locale, }: 
 }): import("react/jsx-runtime").JSX.Element | null;
 /** Wrap DSH's own user renderer only when this plugin's durable prefix exists. */
 export declare function annotatedUserMessageRenderer(Original: UserNodeRenderer, locale: DshLocale, onOpenWebChat?: OpenWebChatReference): (props: UserNodeProps) => ReactNode;
-/** Mount the composer capsule and a thin wrapper around DSH's user renderers. */
+/** Mount composer references and native text projections; rc.2 predates userText. */
 export declare function mountParentConversationAnnotations(ctx: DshClientContext, removeAnnotations: (sessionId: SessionId) => void, onOpenWebChat?: OpenWebChatReference): () => void;
 export {};

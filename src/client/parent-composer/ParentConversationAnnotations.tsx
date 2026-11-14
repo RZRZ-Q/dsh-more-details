@@ -19,6 +19,7 @@ import {
   parseWebChatReferencePrompt, WEBCHAT_REFERENCE_START, WEBCHAT_REFERENCE_END, type WebChatReference,
 } from '../../shared/webchat-reference.js'
 import { WebChatDraftReferences, WebChatReferenceCard, type OpenWebChatReference } from './webchat-reference.js'
+import { ParentReferenceText, parentReferenceTextRule, PARENT_REFERENCE_TEXT_ID } from './parent-user-text.js'
 
 type Locale = keyof typeof SIDE_CHAT_MESSAGES
 interface UserNodeProps {
@@ -227,7 +228,7 @@ export function annotatedUserMessageRenderer(Original: UserNodeRenderer, locale:
   }
 }
 
-/** Mount the composer capsule and a thin wrapper around DSH's user renderers. */
+/** Mount composer references and native text projections; rc.2 predates userText. */
 export function mountParentConversationAnnotations(
   ctx: DshClientContext,
   removeAnnotations: (sessionId: SessionId) => void,
@@ -247,6 +248,17 @@ export function mountParentConversationAnnotations(
     </>
   )))
 
+  const userText = ctx.uiConversation.userText
+  if (userText !== undefined) {
+    const removeText = slots.inject('conversation.user.text.node', () => slots.register({
+      name: 'conversation.user.text.node', key: PARENT_REFERENCE_TEXT_ID,
+    }, ({ node, interactive }: Parameters<typeof ParentReferenceText>[0]) => <ParentReferenceText
+      node={node} interactive={interactive} locale={ctx.locale} {...onOpenWebChat === undefined ? {} : { onOpenWebChat }} />))
+    const removeRule = userText.register(parentReferenceTextRule)
+    return () => { removeRule(); removeText(); removeDock() }
+  }
+
+  // DSH 0.2.0-rc.2 has no userText registry or message-source child chain.
   const shadow = (key: 'user' | 'steering'): (() => void) => slots.inject(
     'conversation.chat.node',
     () => {

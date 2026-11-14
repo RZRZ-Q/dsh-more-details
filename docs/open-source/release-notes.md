@@ -1,5 +1,37 @@
 # Release notes / 发布说明
 
+## v0.3.19 · Preserve native messages on DSH 0.2.2-rc.1
+
+Fixes [#3](https://github.com/RZRZ-Q/dsh-more-details/issues/3): enabling More Details could make every user message fail with `renderSlotChain is not a function` on DSH 0.2.2-rc.1.
+
+- Reference cards now use DSH's official user-text extension. Native message renderers keep their source chain, attachments, and actions; no empty source-rendering callback is installed.
+- Keeps all six previously supported DSH versions, including the original rendering path for 0.2.0-rc.2, which predates the text-extension API.
+- Preserves surrounding text, old reference formats, native session labels, and malformed content. Read-only summaries use compact labels.
+- Saved-data and RPC formats are unchanged. Native Copy follows DSH's original-text behavior and can include serialized reference content.
+
+Install the complete attached `dsh-more-details-0.3.19.tgz` through **Plugins → Add plugin**. GitHub is published first; once npm publication is complete, use `dsh-more-details@0.3.19` through the same installer or your matching DSH CLI:
+
+```sh
+dsh plugin --profile web add dsh-more-details@0.3.19 --registry=https://registry.npmjs.org
+```
+
+For Desktop, use its bundled CLI and `--profile desktop`. Keep your existing profile and data; fully quit the target instance before CLI installation, then reopen it.
+
+**Verified:** 360 regression tests, 23 identity tests, engineering checks, and isolated installation/imports on all seven declared hosts. Independent macOS Web hosts on 0.2.2-rc.1 and 0.2.1-rc.5 passed native-message and reference-preview checks with no console errors, plus persisted snapshot reads after Host restarts. Official-renderer regression tests verified the source chain with controlled fixtures. This update does not claim Windows, full LiveShare, live model/website sending, or new-version Desktop acceptance. [Full validation scope](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.19/docs/open-source/validation.md).
+
+Assets: complete plugin package, public source archive, and `SHA256SUMS`. Private conversations, credentials, backups, and raw validation logs are excluded.
+
+<details>
+<summary>简体中文</summary>
+
+修复 DSH 0.2.2-rc.1 中启用插件后用户消息出现 `renderSlotChain is not a function` 的问题。引用卡改接官方正文扩展接口，保留原生消息来源、附件与操作；不使用跳过来源展示的空函数。此前六版支持与旧引用格式全部保留，最早 rc.2 继续使用原实现，保存数据与 RPC 不变。原生复制按 DSH 的原文语义处理，可能包含引用序列化内容。
+
+在「插件 → 添加插件」安装附件 `dsh-more-details-0.3.19.tgz`；npm 发布后也可安装 `dsh-more-details@0.3.19`。沿用原 profile 与数据，CLI 安装前退出目标实例，安装后重开。
+
+通过 360 项回归、23 项身份测试、工程检查与七版隔离安装/导入。独立 macOS Web 环境中的新版和 rc.5 均通过原生消息、引用卡预览和重启后快照读取，控制台无错误；来源链另由官方渲染器与受控节点回归验证。本轮未重跑模型/官网发送、新版 Desktop 或 LiveShare 全流程，Windows 待反馈者复测。附件提供完整安装包、公开源码包与校验值。
+
+</details>
+
 ## v0.3.18 · Support DSH 0.2.1-rc.5
 
 Adds exact **DSH 0.2.1-rc.5** support while retaining **0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, and 0.2.1-rc.3**. This is a complete plugin package; no compatibility exemption is needed. Runtime code, RPC, and saved-data formats are unchanged from 0.3.17.

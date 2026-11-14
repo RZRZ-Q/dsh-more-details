@@ -161,7 +161,7 @@ describe('Side Chat panel and parent annotations', () => {
     const remove = vi.fn()
     const register = vi.fn(() => remove)
     const inject = vi.fn((_name: string, mount: () => () => void) => mount())
-    const dispose = mountParentConversationAnnotations({ slots: { register, inject, entries: () => [] } } as never, () => {})
+    const dispose = mountParentConversationAnnotations({ slots: { register, inject, entries: () => [] }, uiConversation: {} } as never, () => {})
     expect(register).toHaveBeenCalledWith(expect.objectContaining({ name: 'conversation.input.dock', order: 30 }), expect.any(Function))
     dispose()
     expect(remove).toHaveBeenCalledTimes(3)

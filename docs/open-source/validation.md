@@ -1,5 +1,23 @@
 # 验收范围与自行测试
 
+## 0.3.19：原生消息展示与 DSH 0.2.2-rc.1
+
+2026-11-14，在 macOS arm64 上使用官方 DSH `0.2.2-rc.1` 和 `0.2.1-rc.5` 的独立 Web profile、Host 进程与无头 Chromium 验收。使用专门创建的测试会话与附件，没有复制日常会话、账号或网页登录数据，没有操作现有 DSH 或切换桌面。
+
+| 检查项 | 结果与范围 |
+| --- | --- |
+| 工程检查 | 33 个测试文件 / 360 项回归、23 项公开身份测试通过；peer、类型、lint、构建与包检查通过。 |
+| 七版安装 | `0.2.0-rc.2`、`0.2.1-alpha.4`、`0.2.1-rc.1`、`0.2.1-rc.2`、`0.2.1-rc.3`、`0.2.1-rc.5`、`0.2.2-rc.1` 均通过隔离依赖安装与公开入口导入。 |
+| 官方插槽契约 | 使用官方 npm 包的真实文本 evaluator 和 Slot renderer，配合受控消息外壳与来源节点，验证来源链继续渲染、原生注册项不被替换、加载顺序与卸载恢复。最早 rc.2 的旧路径继续通过既有回归。此项不等于 LiveShare 全流程验收。 |
+| 两版实际安装 | 通过各自官方 CLI 安装同一候选包；149 个分发文件均与验收归档逐字节一致。安装器曾复用同路径同版本候选包缓存，核验发现后改用唯一归档文件名重新安装并确认一致。 |
+| 两版真实页面 | 每版五条用户消息正常显示，保留文件附件、五个原生复制按钮、选文卡、原生会话引用标签和侧聊引用标签；网页引用预览展开后显示两条快照消息。两版浏览器控制台均为零错误、零警告。 |
+| 正文与异常格式 | 回归覆盖多个内联引用、前后正文、损坏标注原样保留、旧首问 LF/CRLF、XML 单次解码，以及带特殊字符的原生引用标题。只读摘要使用紧凑标签。 |
+| 保存、重启与读取 | 两版均通过实际 Host 附件保存与已提交引用回读。结束 Host 后用新进程重新读取，仍为五条原用户消息、两条快照消息，快照哈希一致；重新打开保存的会话后引用卡正常显示。读取工具已注册。 |
+
+本轮没有调用模型、采集真实官网讨论或运行 Desktop browser guest，不将这些结果写作自动发送、实际模型工具调用或网页登录恢复的新一轮验收。Windows 仍待 issue 作者复测；旧版 Desktop 流程的历史结果保留在对应版本章节。原生来源链的保留由上述渲染器回归验证，未连接 LiveShare Relay。只更新插件、依赖兼容声明及发布材料，保存协议、Host 服务与 RPC 未改。
+
+English summary: 360 regression tests, 23 public-identity tests, engineering checks, and isolated installation/imports across all seven declared hosts passed. Independent macOS Web hosts on DSH 0.2.2-rc.1 and 0.2.1-rc.5 displayed native messages, attachments, actions, selection cards, session labels, and saved web-reference previews without console errors. Both reopened the same persisted records and read identical two-message snapshots after Host restarts. Official renderer tests with controlled fixtures verified the source chain and plugin unloading. No model calls, live website capture, Desktop guest workflow, Windows execution, or full LiveShare acceptance is claimed for this update.
+
 ## 0.3.18：rc.5 兼容验收
 
 2026-10-30，使用官方 macOS arm64 DSH `0.2.1-rc.5` 的运行 payload 与 Electron 44.7.0 Direct 测试壳，应用标识、profile、agents 和浏览器数据均独立；沿用以前的独立测试数据。测试壳仅负责隔离路径，官方运行文件未修改，不随插件分发。未切换桌面。

@@ -1,5 +1,17 @@
 # DSH 版本兼容
 
+## 0.3.19：DSH 0.2.2-rc.1 消息渲染兼容
+
+新增 `0.2.2-rc.1`，保留此前六个宿主版本。修复 [#3](https://github.com/RZRZ-Q/dsh-more-details/issues/3) 中启用插件后用户消息报 `renderSlotChain is not a function` 的问题。
+
+新版原生用户消息注册拥有 `conversation.chat.user.before` 子插槽，原来的消息包装层只调用原组件，丢失了该注册项对应的渲染能力。本版改用官方 `uiConversation.userText` 规则与 `conversation.user.text.node`，只投影插件自己的合法引用片段，不替换原生消息组件，也不注入跳过来源展示的空函数。普通正文、来源链、附件和消息操作继续由宿主负责。最早的 `0.2.0-rc.2` 没有此文本接口，保留原有实现。
+
+引用序列化、Host 服务、RPC、网页登录与历史保存格式不变。旧引用可直接显示；只读摘要使用紧凑标签，已发送消息保留引用卡与预览。安装、官方渲染器回归及独立 Web 宿主验收的具体结果见[验收记录](validation.md)。本轮不把 macOS Web 验收外推为 Windows 或新版 Desktop 的完整验收。
+
+新版只改变文本展示，不改写原生消息数据。因此消息级复制继续采用 DSH 的原文语义，可能包含引用的序列化内容；本版没有拦截原生复制操作。
+
+English summary: 0.3.19 adds exact DSH 0.2.2-rc.1 support and keeps all six earlier hosts. Reference presentation now uses the official user-text extension instead of shadowing native message renderers. The original implementation remains for 0.2.0-rc.2, which predates that API. Saved-data and RPC formats are unchanged; see the release-specific validation scope.
+
 ## 0.3.18：DSH 0.2.1-rc.5 兼容
 
 本版增加 `0.2.1-rc.5` 的精确兼容声明，保留 `0.2.0-rc.2`、`0.2.1-alpha.4`、`0.2.1-rc.1`、`0.2.1-rc.2`、`0.2.1-rc.3`；开发依赖同步至 rc.5。未将 rc.4 或未来版本纳入未经验证的范围。分发完整插件包，安装无需本机兼容豁免。
