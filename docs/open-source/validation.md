@@ -1,5 +1,22 @@
 # 验收范围与自行测试
 
+## 0.3.20：DSH 0.2.2-rc.5 验收
+
+2026-11-24，在 macOS arm64 上使用官方 `0.2.2-rc.5` Web 宿主，以及官方 Desktop 运行包和独立 Electron 测试壳。安装和操作均在独立环境中完成，使用专门创建的测试会话。
+
+| 检查项 | 结果 |
+| --- | --- |
+| 工程检查 | 33 个测试文件、360 项回归测试和 23 项公开发布身份测试通过。新版宿主的主题 CSS 打包格式已纳入现有测试。 |
+| 八版安装 | 所有八个声明版本均通过隔离安装及入口导入。官方 `0.2.2-rc.5` Desktop 安装候选包时无需兼容豁免。 |
+| Web | 原生消息、划词加入主草稿和引用预览通过。宿主重启后读回相同快照。 |
+| Desktop 自动发送 | 在已完成消息中划词并点「更多详情」。官网只收到一条请求并返回回复。 |
+| Desktop 引用回读 | 「添加到 DSH」将真实讨论带回主会话。主模型调用 `read_webchat_reference`，读取官网用户消息和助手回复各一条。 |
+| Desktop 冷启动 | 完整退出后重开，原主会话和引用卡恢复。打开官网前再次调用读取工具，结果与退出前完全一致。随后从引用卡免登录打开同一网页讨论，仍为原来的一问一答。 |
+
+Windows 和 Linux 完整流程仍待验收。此次结果针对 macOS arm64 上的官方 `0.2.2-rc.5` 运行包。旧版本的验收结果见下文。
+
+English summary. All eight declared versions passed isolated installation and imports. On macOS arm64, the isolated official 0.2.2-rc.5 Web host passed native message, selection-to-draft and saved-reference checks. Desktop passed installation without an exemption, one selection-triggered send to the real website, a live reply, and a main-model read of both captured messages. After a full exit and relaunch, the same tool result was read before any website page was opened. Opening the reference then restored the original signed-in chat with its single question and reply. Windows and Linux full workflow verification is pending.
+
 ## 0.3.19：原生消息展示与 DSH 0.2.2-rc.1
 
 2026-11-14，在 macOS arm64 上使用官方 DSH `0.2.2-rc.1` 和 `0.2.1-rc.5` 的独立 Web profile、Host 进程与无头 Chromium 验收。使用专门创建的测试会话与附件，没有复制日常会话、账号或网页登录数据，没有操作现有 DSH 或切换桌面。

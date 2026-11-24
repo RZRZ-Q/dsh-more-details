@@ -1,5 +1,24 @@
 # Release notes / 发布说明
 
+## v0.3.20 · Support DSH 0.2.2-rc.5
+
+DSH `0.2.2-rc.5` can now install More Details without a compatibility exemption. All seven previously supported host versions remain supported. The `0.3.19` package requested in the same issue is already available on npm. [Issue #4](https://github.com/RZRZ-Q/dsh-more-details/issues/4).
+
+Install the attached `dsh-more-details-0.3.20.tgz` through **Plugins → Add plugin**. Once `0.3.20` appears in npm, you can install `dsh-more-details@0.3.20` through the same installer. The Discover entry follows npm verification.
+
+All eight declared hosts passed isolated installation and imports. On macOS arm64 Desktop, selecting text triggered one send to DeepSeek and a reply. The main model read both captured messages through `read_webchat_reference`. After a full restart, it returned the identical result before the website was opened. The original discussion then reopened without another sign-in or send. The macOS Web checks also passed. Windows and Linux full workflow verification is pending. [Full validation results](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.20/docs/open-source/validation.md).
+
+<details>
+<summary>简体中文</summary>
+
+DSH `0.2.2-rc.5` 现在可以直接安装「更多详情」，无需兼容豁免。此前七个宿主版本继续支持。同一 issue 提到的 `0.3.19` 已在 npm 上架。[反馈 #4](https://github.com/RZRZ-Q/dsh-more-details/issues/4)。
+
+在「插件 → 添加插件」中安装附件 `dsh-more-details-0.3.20.tgz`。npm 上架后，也可以在同一入口安装 `dsh-more-details@0.3.20`。「发现」条目在验证 npm 安装后更新。
+
+八个声明版本均通过隔离安装和入口导入。在 macOS arm64 Desktop 上，划词后官网只收到一次自动发送并返回回复，主模型通过 `read_webchat_reference` 读回两条消息。完整重启后，在打开官网前再次回读，工具结果完全一致。随后免登录打开了同一讨论，没有重复发送。macOS Web 验收也已通过，Windows 和 Linux 完整流程仍待验收。[完整验收结果](https://github.com/RZRZ-Q/dsh-more-details/blob/v0.3.20/docs/open-source/validation.md)。
+
+</details>
+
 ## v0.3.19 · Preserve native messages on DSH 0.2.2-rc.1
 
 Fixes [#3](https://github.com/RZRZ-Q/dsh-more-details/issues/3): enabling More Details could make every user message fail with `renderSlotChain is not a function` on DSH 0.2.2-rc.1.

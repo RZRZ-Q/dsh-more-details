@@ -1,5 +1,13 @@
 # DSH 版本兼容
 
+## 0.3.20：支持 DSH 0.2.2-rc.5
+
+新增精确版本 `0.2.2-rc.5`，保留此前七个宿主版本。新版宿主可直接安装，无需手动加兼容豁免。插件运行文件与 0.3.19 逐字节一致，测试适配了宿主新版主题 CSS 的打包格式。[反馈 #4](https://github.com/RZRZ-Q/dsh-more-details/issues/4)。
+
+在 macOS arm64 上，八个声明版本均通过隔离安装和入口导入。`0.2.2-rc.5` 还通过隔离 Web 验收以及 Desktop 划词自动发送、引用回读和完整退出重开。Windows 和 Linux 完整流程仍待验收。[验收记录](validation.md)。
+
+English summary. 0.3.20 adds exact support for DSH 0.2.2-rc.5 and retains all seven previously supported versions. All eight passed isolated installation and imports. The new host also passed Web and Desktop workflow checks on macOS arm64, including automatic sending, reference reads, and a full restart. Windows and Linux full workflow verification is pending.
+
 ## 0.3.19：DSH 0.2.2-rc.1 消息渲染兼容
 
 新增 `0.2.2-rc.1`，保留此前六个宿主版本。修复 [#3](https://github.com/RZRZ-Q/dsh-more-details/issues/3) 中启用插件后用户消息报 `renderSlotChain is not a function` 的问题。

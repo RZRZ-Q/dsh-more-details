@@ -4,12 +4,13 @@
 
 ## Supported environments
 
-Current version: **0.3.19**, declaring **DSH 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, 0.2.1-rc.3, 0.2.1-rc.5, and 0.2.2-rc.1**. Web Chat needs the official Desktop browser guest. In an ordinary browser, the plugin hides New Chat and disables More details with an explanation. Add to chat, API side chat, saved-reference previews, and on-demand snapshot reading remain available; reopening the website inside the plugin is Desktop-only. The 0.2.2-rc.1 work covers the Web host on macOS, not complete Desktop acceptance for that release. Windows/Linux full feature acceptance is still unverified.
+The current plugin version is **0.3.20**. It supports **DSH 0.2.0-rc.2, 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, 0.2.1-rc.3, 0.2.1-rc.5, 0.2.2-rc.1, and 0.2.2-rc.5**. Web Chat needs the official Desktop browser guest. In an ordinary browser, the plugin hides New Chat and disables More details with an explanation. Add to chat, API side chat, saved-reference previews, and on-demand snapshot reading remain available. The core Web and Desktop workflows on DSH 0.2.2-rc.5 passed on macOS arm64. Windows and Linux full workflow verification is pending.
 
 Validation is recorded by release rather than implied for every update:
 
 | Plugin release | Scope and validation |
 | --- | --- |
+| 0.3.20 | Adds exact DSH 0.2.2-rc.5 support and retains the seven earlier versions. On this host, isolated macOS Web and Desktop checks passed, including Desktop automatic sending, reference reads, and full restart recovery. [Validation results](open-source/validation.md). |
 | 0.3.19 | Fixes message rendering on DSH 0.2.2-rc.1 while preserving native message-source displays, attachments, actions, and older hosts. See the [validation records](open-source/validation.md) for this release’s environments and results. |
 | 0.3.18 | Exact rc.5 support with all five earlier hosts retained. Six-host installation/import checks and 349 tests passed. Isolated macOS rc.5 passed automatic sending, actual model reference reads, full restart recovery, signed-in history reopening, and follow-up. The existing official rc.5 installation retained sign-in, history, settings, sessions, and attachments. |
 | 0.3.17 | 349 tests and isolated macOS rc.3 acceptance passed: sidebar New Chat / Continue chat, an unobstructed main send control, restoration of the same webpage and unsent draft without duplicate sending, reference capture, and history reopening. Installation preserved all 110 protected files. Automatic selection sending, main-model reference-tool reading, and full restart recovery were not rerun. |
@@ -25,21 +26,21 @@ See [version compatibility](open-source/compatibility.md), [validation records](
 
 ### npm (recommended)
 
-0.3.19 is distributed through the [GitHub release archive](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.19) first. The 0.3.19 npm commands below become available once npm publication is complete.
+Install `0.3.20` from the [GitHub release archive](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.20). The npm commands below apply once `0.3.20` is available in npm.
 
-In **Plugins → Add plugin**, enter `dsh-more-details@0.3.19`. DSH installs the precompiled package from npm and checks host compatibility. Use the same profile when upgrading; changing the package source does not require removing plugin data.
+In **Plugins → Add plugin**, enter `dsh-more-details@0.3.20`. DSH installs the precompiled package from npm and checks host compatibility. Use the same profile when upgrading; changing the package source does not require removing plugin data.
 
 For the Desktop CLI, use the **CLI bundled with your Desktop installation**. Fully quit the test/target DSH instance before a CLI installation, then reopen it. This macOS example assumes `~/Applications`; adjust the executable path for your installation:
 
 ```sh
-"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.19
+"$HOME/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh" plugin --profile desktop add dsh-more-details@0.3.20
 ```
 
-For browser-hosted DSH, use its own CLI and profile, for example `dsh plugin --profile web add dsh-more-details@0.3.19`. Do not use a separately installed CLI to manage the Desktop profile, or run bare `pnpm add` in an arbitrary directory. Future upgrades use the same command with the desired compatible version. If a registry mirror has not synchronized a newly released version, add `--registry=https://registry.npmjs.org` to that installation command; this does not change global registry settings.
+For browser-hosted DSH, use its own CLI and profile, for example `dsh plugin --profile web add dsh-more-details@0.3.20`. Do not use a separately installed CLI to manage the Desktop profile, or run bare `pnpm add` in an arbitrary directory. Future upgrades use the same command with the desired compatible version. If a registry mirror has not synchronized a newly released version, add `--registry=https://registry.npmjs.org` to that installation command; this does not change global registry settings.
 
 ### Discover
 
-DSH 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, 0.2.1-rc.3, 0.2.1-rc.5, and 0.2.2-rc.1 support the author's native market index:
+The author-maintained native market index works with DSH 0.2.1-alpha.4, 0.2.1-rc.1, 0.2.1-rc.2, 0.2.1-rc.3, 0.2.1-rc.5, 0.2.2-rc.1, and 0.2.2-rc.5.
 
 1. In **Plugins → Experimental plugins → More**, enable **Custom plugin market**.
 2. In **Discover → Add index source**, add `https://raw.githubusercontent.com/RZRZ-Q/dsh-more-details/main/market/index.json`.
@@ -50,14 +51,14 @@ New versions enter the index after npm publication is confirmed, using an exact 
 ### Git and release archives
 
 - **Git:** use the full public commit associated with the desired release: `git+https://github.com/RZRZ-Q/dsh-more-details.git#<full-commit>`. Enter it in **Add plugin** or pass it to the bundled `dsh plugin --profile desktop add` command. Built runtime files are committed.
-- **Archive:** download `dsh-more-details-0.3.19.tgz` from the [release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.19) and install via **Add plugin**. The source archive and `SHA256SUMS` are provided separately.
+- **Archive:** download `dsh-more-details-0.3.20.tgz` from the [release](https://github.com/RZRZ-Q/dsh-more-details/releases/tag/v0.3.20) and install via **Add plugin**. The source archive and `SHA256SUMS` are provided separately.
 
 A local archive can remain a `file:` dependency of the profile. Keep the archive at its recorded path while that dependency exists; moving or deleting it can block other package operations in the same profile. Prefer npm for installations that should not depend on local archive storage.
 
 ### Migrate an existing tgz or Git installation
 
 1. Back up the target profile and fully quit that DSH instance before CLI changes. Keep the same profile, plugin name, credentials, attachments, and browser data.
-2. Install `dsh-more-details@0.3.19` through the matching DSH installer/CLI. This replaces the package source; do not uninstall the plugin and delete its data first.
+2. Install `dsh-more-details@0.3.20` through the matching DSH installer/CLI. This replaces the package source; do not uninstall the plugin and delete its data first.
 3. Reopen DSH and check the version, custom prompt, history, existing references, and remembered website sign-in. Website sessions can expire independently.
 4. Remove the old archive only after the profile's dependency for this plugin no longer points to it and another plugin/package operation succeeds.
 
