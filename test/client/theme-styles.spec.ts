@@ -11,19 +11,18 @@ const harnessThemeBundle = readFileSync(
   require.resolve('@deepseek-ai/dsh-client-ui-theme/client'),
   'utf8',
 )
-const encodedThemeCss = /\bdesign_platform_css_default\s*=\s*("(?:[^"\\]|\\.)*")/.exec(
+const [, quotedThemeCss, templateThemeCss] = /\bdesign_platform_css_default\s*=\s*(?:("(?:[^"\\]|\\.)*")|`([^`\\]*)`)/.exec(
   harnessThemeBundle,
-)?.[1]
-if (encodedThemeCss === undefined) throw new Error('DSH theme bundle does not contain design-platform.css')
-const parsedThemeCss: unknown = JSON.parse(encodedThemeCss)
-if (typeof parsedThemeCss !== 'string') throw new Error('DSH theme bundle contains invalid design-platform.css')
+) ?? []
+const parsedThemeCss: unknown = quotedThemeCss === undefined ? templateThemeCss : JSON.parse(quotedThemeCss)
+if (typeof parsedThemeCss !== 'string') throw new Error('DSH theme bundle does not contain readable design-platform.css')
 const harnessThemeCss = parsedThemeCss
 
 function themeValues(dark: boolean): Map<string, string> {
   const values = new Map<string, string>()
   for (const block of harnessThemeCss.matchAll(/body(\[data-ds-dark-theme\])?\s*\{([^}]*)\}/g)) {
     if (block[1] !== undefined && !dark) continue
-    for (const declaration of (block[2] ?? '').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+    for (const declaration of (block[2] ?? '').matchAll(/(--[\w-]+)\s*:\s*([^;]+)(?:;|$)/g)) {
       values.set(declaration[1] ?? '', (declaration[2] ?? '').trim())
     }
   }
